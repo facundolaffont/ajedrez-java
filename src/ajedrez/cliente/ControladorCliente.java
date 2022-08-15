@@ -21,30 +21,6 @@ public class ControladorCliente implements IControladorRemoto, IControladorClien
 		((VistaConsola) _iVista).mostrarVentana();
 	}
 	
-	/**
-	 * Indica al servidor que el jugador abandonó la partida.
-	 * 
-	 * @param nombreJugadorQueAbandona
-	 * @return
-	 * 		SIN_ERROR;
-	 *		SIN_CONEXION (no se estableció conexión con el servidor);
-	 * 		ERROR_DE_COMUNICACION (error al intentar comunicarse con el servidor);
-	 * 		ESTADO_DE_PARTIDA_INCORRECTO (no se puede abandonar en el estado actual de la partida).
-	 */
-	public EnumError abandonarPartida(String nombreJugadorQueAbandona) {
-		if(_iControladorServidor == null) return EnumError.SIN_CONEXION;
-
-		try { return _iControladorServidor.declararGanadorPorAbandono(nombreJugadorQueAbandona); }
-		catch (RemoteException e) { return EnumError.ERROR_DE_COMUNICACION; }
-	}
-
-	public EnumError registrarJugador(String nombreJugador) {
-		if(_iControladorServidor == null) return EnumError.SIN_CONEXION;
-
-		try { return _iControladorServidor.registrarJugador(nombreJugador); }
-		catch (RemoteException e) { return EnumError.ERROR_DE_COMUNICACION; }
-	}
-	
 	@Override
 	public void actualizar(IObservableRemoto controladorServidor, Object mensaje) {}
 

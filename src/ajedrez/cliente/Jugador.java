@@ -9,15 +9,15 @@ public class Jugador implements IJugador {
 	/* Miembros públicos. */
 
 	public Jugador(ControladorCliente controlador) {
-		this.controlador = controlador;
-		this.nombre = null;
-		this.colorDePiezas = EnumColorPieza.SIN_COLOR;
+		_controlador = controlador;
+		_nombre = null;
+		_colorDePiezas = EnumColorPieza.SIN_COLOR;
     }
 
 	public Jugador(ControladorCliente controlador, String nombre, EnumColorPieza colorDePiezas) {
-		this.controlador = controlador;
-		this.nombre = nombre;
-		this.colorDePiezas = colorDePiezas;
+		_controlador = controlador;
+		_nombre = nombre;
+		_colorDePiezas = colorDePiezas;
 	}
 	
 	/**
@@ -25,39 +25,24 @@ public class Jugador implements IJugador {
 	 * si todavía no tiene nombre asignado.}
 	 */
 	public String getNombre() {
-		return nombre;
+		return _nombre;
 	}
 
 	public EnumColorPieza getColorDePiezas() {
-		return colorDePiezas;
+		return _colorDePiezas;
 	}
 
 	public void setColorDePiezas(EnumColorPieza colorDePiezas) {
-		this.colorDePiezas = colorDePiezas;
+		_colorDePiezas = colorDePiezas;
 	}
 	
 	public void setNombre(String nombre) {
-		this.nombre = nombre;
+		_nombre = nombre;
 	}
 	
-    /**
-	 * Solicita al servidor si puede registrarse el nombre de usuario.
-	 *
-	 * @return SIN_ERROR (se registró el jugador);
-	 * 		JUGADOR_EXISTENTE (ya existe un jugador con ese nombre);
-	 * 		SALA_LLENA (no hay lugar para nuevos jugadores).
-	 */
-	public EnumError solicitarRegistroDeJugador() {
-		return controlador.registrarJugador(nombre);
-	}
-	
-	public EnumError abandonarPartida() {
-		return controlador.abandonarPartida(nombre);
-	}
-
 	public void cambiarColor() {
-		colorDePiezas =
-			colorDePiezas == EnumColorPieza.BLANCA
+		_colorDePiezas =
+			_colorDePiezas == EnumColorPieza.BLANCA
 			? EnumColorPieza.NEGRA
 			: EnumColorPieza.BLANCA;
 	}
@@ -65,7 +50,7 @@ public class Jugador implements IJugador {
 
 	/* Miembros privados. */
 
-	private String nombre;
-	private EnumColorPieza colorDePiezas;
-	private ControladorCliente controlador;
+	private String _nombre;
+	private EnumColorPieza _colorDePiezas;
+	private ControladorCliente _controlador;
 }
