@@ -1,5 +1,6 @@
 package ajedrez.cliente;
 
+import ajedrez.controlador.ControladorCliente;
 import ajedrez.modelo.EnumColorPieza;
 
 public class Jugador implements IJugador {

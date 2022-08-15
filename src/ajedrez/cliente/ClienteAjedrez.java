@@ -1,6 +1,8 @@
 package ajedrez.cliente;
 
 import java.rmi.RemoteException;
+
+import ajedrez.controlador.ControladorCliente;
 import ajedrez.modelo.EnumError;
 import ar.edu.unlu.rmimvc.RMIMVCException;
 import ar.edu.unlu.rmimvc.cliente.Cliente;
