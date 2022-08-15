@@ -1,4 +1,4 @@
-package ajedrez.cliente;
+package ajedrez.controlador;
 
 public interface IControladorCliente {
 }
