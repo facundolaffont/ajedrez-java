@@ -1,7 +1,6 @@
 package ajedrez.cliente;
 
 import ajedrez.modelo.EnumColorPieza;
-import ajedrez.modelo.EnumError;
 
 public class Jugador implements IJugador {
 
@@ -52,5 +51,6 @@ public class Jugador implements IJugador {
 
 	private String _nombre;
 	private EnumColorPieza _colorDePiezas;
-	private ControladorCliente _controlador;
+	@SuppressWarnings("unused") private ControladorCliente _controlador;
+
 }

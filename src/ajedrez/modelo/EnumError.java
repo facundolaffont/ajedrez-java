@@ -1,9 +1,7 @@
 package ajedrez.modelo;
 
-import java.io.Serializable;
-
-public enum EnumError implements Serializable {
-	SIN_ERROR, // Valor de inicialización para los objetos Error.
+public enum EnumError {
+	SIN_ERROR,
 	PARTIDA_EN_PAUSA,
 	TURNO_INVALIDO,
 	PIEZA_INVALIDA,
