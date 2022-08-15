@@ -6,8 +6,8 @@ import ajedrez.cliente.ClienteAjedrez;
 import ajedrez.cliente.Jugador;
 import ajedrez.modelo.EnumError;
 import ajedrez.servidor.IControladorServidor;
-import ajedrez.vista.consola.IVista;
-import ajedrez.vista.consola.VistaConsola;
+import ajedrez.vista.IVista;
+import ajedrez.vista.VistaConsola;
 import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 

@@ -1,4 +1,4 @@
-package ajedrez.vista.consola;
+package ajedrez.vista;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
