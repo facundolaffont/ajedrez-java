@@ -97,15 +97,15 @@ public class VistaConsola extends JFrame implements IVista {
 	
 	public void mostrarVentana() {
 		this.setVisible(true);
-		this._textoComandos.requestFocus();
+		_textoComandos.requestFocus();
 	}
 	
 
 	/* Miembros privados. */
 	
-	@SuppressWarnings("unused") private IControladorCliente _iControlador;
+	private IControladorCliente _iControlador;
 	private IClienteAjedrez _iClienteAjedrez;
-	@SuppressWarnings("unused") private IJugador _iJugador;
+	private IJugador _iJugador;
 	private Dimension _pantalla;
 	private int _ancho,
 				_alto;
@@ -385,4 +385,5 @@ public class VistaConsola extends JFrame implements IVista {
 
 		return true;
 	}
+
 }

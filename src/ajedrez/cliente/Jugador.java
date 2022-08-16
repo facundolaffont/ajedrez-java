@@ -52,6 +52,6 @@ public class Jugador implements IJugador {
 
 	private String _nombre;
 	private EnumColorPieza _colorDePiezas;
-	@SuppressWarnings("unused") private ControladorCliente _controlador;
+	private ControladorCliente _controlador;
 
 }

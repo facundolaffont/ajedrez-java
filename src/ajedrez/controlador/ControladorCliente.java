@@ -29,7 +29,7 @@ public class ControladorCliente implements IControladorRemoto, IControladorClien
 	public void actualizar(IObservableRemoto controladorServidor, Object mensaje) {}
 
 	public <T extends IObservableRemoto> void setModeloRemoto(T controladorServidor) {
-		this._iControladorServidor = (IControladorServidor) controladorServidor;
+		_iControladorServidor = (IControladorServidor) controladorServidor;
 	}
 
     public EnumError pingAlServidor() {

@@ -4,10 +4,11 @@ import ajedrez.modelo.EnumError;
 
 public class Terminador {
 
+
     /* Miembros públicos. */
 
     public static Terminador getInstance() {
-        return instancia;
+        return _instancia;
     }
 
     /**
@@ -44,6 +45,6 @@ public class Terminador {
 
     /* Miembros privados. */
 
-    static private Terminador instancia = new Terminador();
+    static private Terminador _instancia = new Terminador();
 
 }

@@ -22,7 +22,7 @@ public class ServidorAjedrez {
 			)
 				ServidorAjedrez
 					.getInstance()
-					.ip = args[1];
+					._ip = args[1];
 			else if(
 				args[0].equals("-p")
 				&& Integer.parseInt(args[1]) >= 1024
@@ -30,7 +30,7 @@ public class ServidorAjedrez {
 			)
 				ServidorAjedrez
 					.getInstance()
-					.puerto = Integer.parseInt(args[1]);
+					._puerto = Integer.parseInt(args[1]);
 			else
 				imprimirInstrucciones();			
 		else if( args.length == 4 ) {// Se especificaron las dos opciones.
@@ -40,7 +40,7 @@ public class ServidorAjedrez {
 			)
 				ServidorAjedrez
 					.getInstance()
-					.ip = args[1];
+					._ip = args[1];
 			else if(
 				args[0].equals("-p")
 				&& Integer.parseInt(args[1]) >= 1024
@@ -48,7 +48,7 @@ public class ServidorAjedrez {
 			)
 				ServidorAjedrez
 					.getInstance()
-					.puerto = Integer.parseInt(args[1]);
+					._puerto = Integer.parseInt(args[1]);
 			else
 				imprimirInstrucciones();
 
@@ -58,7 +58,7 @@ public class ServidorAjedrez {
 			)
 				ServidorAjedrez
 					.getInstance()
-					.ip = args[3];
+					._ip = args[3];
 			else if(
 				args[2].equals("-p")
 				&& Integer.parseInt(args[3]) >= 1024
@@ -66,7 +66,7 @@ public class ServidorAjedrez {
 			)
 				ServidorAjedrez
 					.getInstance()
-					.puerto = Integer.parseInt(args[3]);
+					._puerto = Integer.parseInt(args[3]);
 			else
 				imprimirInstrucciones();
 		}
@@ -74,25 +74,25 @@ public class ServidorAjedrez {
 		// Inicializa el servidor.
 		ServidorAjedrez
 			.getInstance()
-			.servidor = new Servidor(
+			._servidor = new Servidor(
 				ServidorAjedrez
 					.getInstance()
-					.ip,
+					._ip,
 				ServidorAjedrez
 					.getInstance()
-					.puerto
+					._puerto
 			);
 		ServidorAjedrez
 			.getInstance()
-			.controladorServidor = new ControladorServidor();
+			._controladorServidor = new ControladorServidor();
 		try {
 			ServidorAjedrez
 				.getInstance()
-				.servidor
+				._servidor
 				.iniciar(
 					ServidorAjedrez
 						.getInstance()
-						.controladorServidor
+						._controladorServidor
 				);
 		} catch (RemoteException e) {
 			Terminador
@@ -106,21 +106,21 @@ public class ServidorAjedrez {
 	}
 
 	public static ServidorAjedrez getInstance() {
-		return instancia;
+		return _instancia;
 	}
 
 
 	/* Miembros privados. */
 
-	private static ServidorAjedrez instancia = new ServidorAjedrez();
-	private Servidor servidor;
-	private int puerto; 
-	private String ip;
-	private ControladorServidor controladorServidor;
+	private static ServidorAjedrez _instancia = new ServidorAjedrez();
+	private Servidor _servidor;
+	private int _puerto; 
+	private String _ip;
+	private ControladorServidor _controladorServidor;
 
 	private ServidorAjedrez() {
-		ip = "127.0.0.1";
-		puerto = 6666;
+		_ip = "127.0.0.1";
+		_puerto = 6666;
 	}
 
 	/**
@@ -142,4 +142,5 @@ public class ServidorAjedrez {
 			.getInstance()
 			.terminarOK();
 	}
+
 }

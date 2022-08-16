@@ -1,4 +1,3 @@
 package ajedrez.controlador;
 
-public interface IControladorCliente {
-}
+public interface IControladorCliente {}

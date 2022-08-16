@@ -1,4 +1,3 @@
 package ajedrez.vista;
 
-public interface IVista {
-}
+public interface IVista {}

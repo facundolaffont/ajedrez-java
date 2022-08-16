@@ -3,16 +3,9 @@ package ajedrez.cliente;
 import ajedrez.controlador.ControladorCliente;
 
 public class AppCliente {
-    public static void main(String[] args) {
-        /*
-		Icon _iconoApp = null;
-		URL _imgURL = getClass().getResource("iconos/iconoApp50px.png");
-		if (_imgURL != null) {
-			_iconoApp = new ImageIcon(_imgURL, "Icono de aplicación");
-			this.setIconImage(((ImageIcon) _iconoApp).getImage());
-		}
-        */
 
+    public static void main(String[] args) {
         new ControladorCliente();
     }
+
 }
