@@ -32,6 +32,7 @@ public class ClienteAjedrez implements IClienteAjedrez {
 	 * 		ERROR_DESCONOCIDO - Cualquier otro error no contemplado en el diseño;
 	 * 		SIN_ERROR - Conexión exitosa.
 	 */
+	@Override
 	public EnumError conectarseAServidor(String ipServidor, int puertoServidor) {
 
 		// Verifica que el cliente esté configurado.
@@ -69,6 +70,7 @@ public class ClienteAjedrez implements IClienteAjedrez {
 	 * 		VALOR_INVALIDO - puertoCliente es menor a 1 o mayor a 65535;
 	 * 		CONEXION_EXISTENTE - Hay una conexión en curso, y no pueden cambiarse los parámetros de conexión.
 	 */
+	@Override
 	public EnumError configurarCliente(String ipCliente, int puertoCliente) {
 		if(_clienteRMIMVC != null) { return EnumError.CONEXION_EXISTENTE; }
 		if(ipCliente == null) { return EnumError.VALOR_NULO; }
@@ -79,8 +81,18 @@ public class ClienteAjedrez implements IClienteAjedrez {
 		return EnumError.SIN_ERROR;
 	}
 
-	public EnumError enviarPingAlServidor() {
-		EnumError codigoError = _controlador.pingAlServidor();
+	/**
+	 * Verifica si hay conexion con el servidor.
+	 * 
+	 * @return
+	 * 		SIN_CONEXION - No existe un servidor conectado, todavía;
+	 * 		ERROR_DE_COMUNICACION - Hubo un error al intentar comunicarse con el servidor conectado;
+	 * 		ERROR_DESCONOCIDO - Ocurrió un error no previsto;
+	 * 		SIN_ERROR - Hay conexión con el servidor.
+	 */
+	@Override
+	public EnumError chequearConexionConServidor() {
+		EnumError codigoError = _controlador.chequearConexionConServidor();
 		switch(codigoError) {
 			case SIN_ERROR:
 			case SIN_CONEXION:

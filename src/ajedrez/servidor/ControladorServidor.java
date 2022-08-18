@@ -9,8 +9,14 @@ public class ControladorServidor extends ObservableRemoto implements IControlado
 
     /* Miembros públicos. */
 
+    /**
+     * Sólo devuelve un valor para verificar que la conexión está en
+     * buen estado.
+     * 
+     * @return SIN_ERROR - La conexión está en buen estado.
+     */
     @Override
-    public EnumError ping() throws RemoteException {
+    public EnumError chequearConexion() throws RemoteException {
         return EnumError.SIN_ERROR;
     }
 

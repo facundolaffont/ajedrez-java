@@ -6,6 +6,6 @@ import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 
 public interface IControladorServidor extends IObservableRemoto {
 
-    EnumError ping() throws RemoteException;
+    EnumError chequearConexion() throws RemoteException;
 
 }

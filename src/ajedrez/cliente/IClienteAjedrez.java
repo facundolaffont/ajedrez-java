@@ -8,6 +8,6 @@ public interface IClienteAjedrez {
 
     EnumError conectarseAServidor(String ip, int puerto);
 
-    EnumError enviarPingAlServidor();
+    EnumError chequearConexionConServidor();
 
 }
