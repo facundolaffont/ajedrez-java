@@ -1,17 +1,14 @@
 package ajedrez.controlador;
 
 import java.rmi.RemoteException;
-
 import ajedrez.cliente.ClienteAjedrez;
 import ajedrez.cliente.Jugador;
 import ajedrez.modelo.EnumError;
 import ajedrez.servidor.IControladorServidor;
 import ajedrez.vista.IVista;
 import ajedrez.vista.VistaConsola;
-import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
-import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 
-public class ControladorCliente implements IControladorRemoto, IControladorCliente {
+public class ControladorCliente implements IObservador, IControladorCliente {
 
 
 	/* Miembros públicos. */
@@ -26,9 +23,9 @@ public class ControladorCliente implements IControladorRemoto, IControladorClien
 	}
 	
 	@Override
-	public void actualizar(IObservableRemoto controladorServidor, Object mensaje) {}
+	public void actualizar(Object mensaje) {}
 
-	public <T extends IObservableRemoto> void setModeloRemoto(T controladorServidor) {
+	public <T extends IControladorServidor> void setModeloRemoto(T controladorServidor) {
 		_iControladorServidor = (IControladorServidor) controladorServidor;
 	}
 
@@ -41,11 +38,11 @@ public class ControladorCliente implements IControladorRemoto, IControladorClien
 	 * 		ERROR_DESCONOCIDO - Ocurrió un error no previsto;
 	 * 		SIN_ERROR - Hay conexión con el servidor.
 	 */
-    public EnumError chequearConexionConServidor() {
+    public EnumError verificarConexionConServidor() {
 		if(_iControladorServidor == null) return EnumError.SIN_CONEXION;
 
 		try {
-			EnumError codigoError = _iControladorServidor.chequearConexion();
+			EnumError codigoError = _iControladorServidor.verificarConexion();
 			switch(codigoError) {
 				case SIN_ERROR: return codigoError;
 				default: return EnumError.ERROR_DESCONOCIDO;

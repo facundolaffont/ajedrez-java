@@ -1,9 +1,9 @@
 package ajedrez.servidor;
 
-import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import ajedrez.controlador.Terminador;
-import ar.edu.unlu.rmimvc.RMIMVCException;
-import ar.edu.unlu.rmimvc.servidor.Servidor;
 
 public class ServidorAjedrez {
 
@@ -14,95 +14,71 @@ public class ServidorAjedrez {
 
 		// Verifica que los argumentos se hayan pasado correctamente.
 		if( args.length == 1 || args.length == 3 || args.length > 4 )
-			imprimirInstrucciones();			
+			_imprimirInstrucciones();			
 		else if( args.length == 2 ) // Se especificó una sola opción.
 			if(
 				args[0].equals("-ip")
 				&& args[1].matches("(\\d{1,3}\\.){3}\\d{1,3}")
 			)
-				ServidorAjedrez
-					.getInstance()
-					._ip = args[1];
+				_setIP(args[1]);
 			else if(
 				args[0].equals("-p")
 				&& Integer.parseInt(args[1]) >= 1024
 				&& Integer.parseInt(args[1]) <= 65535
 			)
-				ServidorAjedrez
-					.getInstance()
-					._puerto = Integer.parseInt(args[1]);
+				_setPuerto(Integer.parseInt(args[1]));
 			else
-				imprimirInstrucciones();			
+				_imprimirInstrucciones();			
 		else if( args.length == 4 ) {// Se especificaron las dos opciones.
 			if(
 				args[0].equals("-ip")
 				&& args[1].matches("(\\d{1,3}\\.){3}\\d{1,3}")
 			)
-				ServidorAjedrez
-					.getInstance()
-					._ip = args[1];
+				_setIP(args[1]);
 			else if(
 				args[0].equals("-p")
 				&& Integer.parseInt(args[1]) >= 1024
 				&& Integer.parseInt(args[1]) <= 65535
 			)
-				ServidorAjedrez
-					.getInstance()
-					._puerto = Integer.parseInt(args[1]);
+				_setPuerto(Integer.parseInt(args[1]));
 			else
-				imprimirInstrucciones();
+				_imprimirInstrucciones();
 
 			if(
 				args[2].equals("-ip")
 				&& args[3].matches("(\\d{1,3}\\.){3}\\d{1,3}")
 			)
-				ServidorAjedrez
-					.getInstance()
-					._ip = args[3];
+				_setIP(args[3]);
 			else if(
 				args[2].equals("-p")
 				&& Integer.parseInt(args[3]) >= 1024
 				&& Integer.parseInt(args[3]) <= 65535
 			)
-				ServidorAjedrez
-					.getInstance()
-					._puerto = Integer.parseInt(args[3]);
+				_setPuerto(Integer.parseInt(args[3]));
 			else
-				imprimirInstrucciones();
+				_imprimirInstrucciones();
 		}
-		 
-		// Inicializa el servidor.
-		ServidorAjedrez
-			.getInstance()
-			._servidor = new Servidor(
-				ServidorAjedrez
-					.getInstance()
-					._ip,
-				ServidorAjedrez
-					.getInstance()
-					._puerto
-			);
-		ServidorAjedrez
-			.getInstance()
-			._controladorServidor = new ControladorServidor();
+
+		// Crea el controlador del servidor y guarda su stub en el registro RMI.
 		try {
-			ServidorAjedrez
-				.getInstance()
-				._servidor
-				.iniciar(
-					ServidorAjedrez
-						.getInstance()
-						._controladorServidor
+            String nombreStub = "ControladorServidor";
+			_setControladorServidor(new ControladorServidor());
+            ControladorServidor controladorServidorStub =
+                (ControladorServidor) UnicastRemoteObject.exportObject(
+					_getControladorServidor(),
+					_getPuerto()
 				);
-		} catch (RemoteException e) {
-			Terminador
+            Registry registroRMI = LocateRegistry.getRegistry(_getIP(), _getPuerto());
+            registroRMI.rebind(nombreStub, controladorServidorStub);
+            System.out.println("El servidor se creó y está ejecutándose.");
+        } catch (Exception e) {
+			e.printStackTrace();
+			/*
+            Terminador
 				.getInstance()
 				.terminarPorExcepcion(e, e.getMessage());
-		} catch (RMIMVCException e) {
-			Terminador
-				.getInstance()
-				.terminarPorExcepcion(e, e.getMessage());
-		}
+			*/
+        } 
 	}
 
 	public static ServidorAjedrez getInstance() {
@@ -113,7 +89,6 @@ public class ServidorAjedrez {
 	/* Miembros privados. */
 
 	private static ServidorAjedrez _instancia = new ServidorAjedrez();
-	private Servidor _servidor;
 	private int _puerto; 
 	private String _ip;
 	private ControladorServidor _controladorServidor;
@@ -123,10 +98,34 @@ public class ServidorAjedrez {
 		_puerto = 6666;
 	}
 
+	private static String _getIP() {
+		return ServidorAjedrez.getInstance()._ip;
+	}
+
+	private static int _getPuerto() {
+		return ServidorAjedrez.getInstance()._puerto;
+	}
+
+	private static ControladorServidor _getControladorServidor() {
+		return ServidorAjedrez.getInstance()._controladorServidor;
+	}
+
+	private static void _setIP(String ip) {
+		ServidorAjedrez.getInstance()._ip = ip;
+	}
+
+	private static void _setPuerto(int puerto) {
+		ServidorAjedrez.getInstance()._puerto = puerto;
+	}
+
+	private static void _setControladorServidor(ControladorServidor controladorServidor) {
+		ServidorAjedrez.getInstance()._controladorServidor = controladorServidor;
+	}
+
 	/**
 	 * Imprime las instrucciones de uso de la aplicación.
 	 */
-	private static void imprimirInstrucciones() {
+	private static void _imprimirInstrucciones() {
 		System.out.println(
 			"SINOPSIS\n"
 				+ "\t\"java\" \"ServidorAjedrez\" [\"-ip\" ip-servidor] [\"-p\" puerto]\n\n"

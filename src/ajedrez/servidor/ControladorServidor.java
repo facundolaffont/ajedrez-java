@@ -2,9 +2,8 @@ package ajedrez.servidor;
 
 import java.rmi.RemoteException;
 import ajedrez.modelo.EnumError;
-import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 
-public class ControladorServidor extends ObservableRemoto implements IControladorServidor {
+public class ControladorServidor implements IControladorServidor {
 
 
     /* Miembros públicos. */
@@ -16,7 +15,7 @@ public class ControladorServidor extends ObservableRemoto implements IControlado
      * @return SIN_ERROR - La conexión está en buen estado.
      */
     @Override
-    public EnumError chequearConexion() throws RemoteException {
+    public EnumError verificarConexion() throws RemoteException {
         return EnumError.SIN_ERROR;
     }
 
