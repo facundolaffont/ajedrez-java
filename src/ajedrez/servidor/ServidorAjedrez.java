@@ -63,8 +63,8 @@ public class ServidorAjedrez {
 		try {
             String nombreStub = "ControladorServidor";
 			_setControladorServidor(new ControladorServidor());
-            ControladorServidor controladorServidorStub =
-                (ControladorServidor) UnicastRemoteObject.exportObject(
+            IControladorServidor controladorServidorStub =
+                (IControladorServidor) UnicastRemoteObject.exportObject(
 					_getControladorServidor(),
 					_getPuerto()
 				);
