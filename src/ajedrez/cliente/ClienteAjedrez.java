@@ -1,6 +1,5 @@
 package ajedrez.cliente;
 
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import ajedrez.controlador.ControladorCliente;
@@ -47,42 +46,18 @@ public class ClienteAjedrez implements IClienteAjedrez {
 		if(_ipServidor != null) return EnumError.CONEXION_EXISTENTE;
 
         try {
-            String nombreStubRemoto = "ControladorServidor";
             Registry registroRMI = LocateRegistry.getRegistry(ipServidor, puertoServidor);
-            IControladorServidor iControladorServidor = (IControladorServidor) registroRMI.lookup(nombreStubRemoto);
+            _controladorStub = (IControladorServidor) registroRMI.lookup("ControladorServidor");
 
 			// Conexión exitosa, se deja registro de los datos del servidor.
 			_ipServidor = ipServidor;
 			_puertoServidor = puertoServidor;
-			_controlador.setModeloRemoto(iControladorServidor);
+			_controlador.setModeloRemoto(_controladorStub);
 
 			return EnumError.SIN_ERROR;
         } catch (Exception e) {
 			return EnumError.ERROR_DE_COMUNICACION;
         }
-
-
-		/*
-		// Intenta conectarse con el servidor.
-		boolean ocurrioExcepcion = false;
-		try { _clienteRMIMVC.iniciar(_controlador); }
-		catch (RemoteException e) {
-			ocurrioExcepcion = true;
-			return EnumError.ERROR_DE_COMUNICACION;
-		}
-		catch (RMIMVCException e) {
-			ocurrioExcepcion = true;
-			return EnumError.ERROR_DE_RMI;
-		}
-		catch (Exception e) {
-			ocurrioExcepcion = true;
-			return EnumError.ERROR_DESCONOCIDO;
-		}
-		finally { if(ocurrioExcepcion)
-			_ipServidor = null;
-			_puertoServidor = 0;
-		}
-		*/
 
 	}
 
@@ -137,5 +112,6 @@ public class ClienteAjedrez implements IClienteAjedrez {
 	private String _ipServidor;
 	private int _puertoServidor;
 	private ControladorCliente _controlador;
+	private IControladorServidor _controladorStub;
 	
 }
