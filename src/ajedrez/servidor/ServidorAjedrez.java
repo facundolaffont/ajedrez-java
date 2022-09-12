@@ -1,5 +1,6 @@
 package ajedrez.servidor;
 
+import java.rmi.Remote;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -61,16 +62,17 @@ public class ServidorAjedrez {
 
 		// Crea el controlador del servidor y guarda su stub en el registro RMI.
 		try {
-            String nombreStub = "ControladorServidor";
 			_setControladorServidor(new ControladorServidor());
-            IControladorServidor controladorServidorStub =
-                (IControladorServidor) UnicastRemoteObject.exportObject(
+            _setControladorServidorStub(
+				(IControladorServidor)
+                UnicastRemoteObject.exportObject(
 					_getControladorServidor(),
 					_getPuerto()
-				);
-            Registry registroRMI = LocateRegistry.getRegistry(_getIP(), _getPuerto());
-            registroRMI.rebind(nombreStub, controladorServidorStub);
-            System.out.println("El servidor se creó y está ejecutándose.");
+				)
+			);
+			Registry registroRMI = LocateRegistry.createRegistry(_getPuerto());
+            registroRMI.bind("ControladorServidor", _getControladorServidorStub());
+        	System.out.println("Servidor creado en <" + _getIP() + ":" + _getPuerto() + ">.");
         } catch (Exception e) {
 			e.printStackTrace();
 			/*
@@ -89,6 +91,7 @@ public class ServidorAjedrez {
 	/* Miembros privados. */
 
 	private static ServidorAjedrez _instancia = new ServidorAjedrez();
+	private IControladorServidor _controladorServidorStub;
 	private int _puerto; 
 	private String _ip;
 	private ControladorServidor _controladorServidor;
@@ -110,6 +113,10 @@ public class ServidorAjedrez {
 		return ServidorAjedrez.getInstance()._controladorServidor;
 	}
 
+	private static IControladorServidor _getControladorServidorStub() {
+		return ServidorAjedrez.getInstance()._controladorServidorStub;
+	}
+
 	private static void _setIP(String ip) {
 		ServidorAjedrez.getInstance()._ip = ip;
 	}
@@ -120,6 +127,10 @@ public class ServidorAjedrez {
 
 	private static void _setControladorServidor(ControladorServidor controladorServidor) {
 		ServidorAjedrez.getInstance()._controladorServidor = controladorServidor;
+	}
+
+	private static void _setControladorServidorStub(IControladorServidor controladorServidorStub) {
+		ServidorAjedrez.getInstance()._controladorServidorStub = controladorServidorStub;
 	}
 
 	/**
