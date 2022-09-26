@@ -8,4 +8,6 @@ public interface IControladorServidor extends Remote {
 
     EnumError verificarConexion() throws RemoteException;
 
+    EnumError registrarJugador(String nombre) throws RemoteException;
+
 }

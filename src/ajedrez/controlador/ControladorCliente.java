@@ -51,6 +51,10 @@ public class ControladorCliente implements IObservador, IControladorCliente {
 		catch (RemoteException e) { return EnumError.ERROR_DE_COMUNICACION; }
     }
 
+    public EnumError registrarJugador(String nombre) {
+        try { return _iControladorServidor.registrarJugador(nombre); }
+		catch (RemoteException e) { return EnumError.ERROR_DE_COMUNICACION; }
+    }
 
 	/* Miembros privados. */
 
