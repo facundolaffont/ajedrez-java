@@ -1,0 +1,40 @@
+v:Vista
+c:ClienteAjedrez
+cc:ControladorCliente
+cs:ControladorServidor
+
+v ---conectarseAServidor(ipServidor, puertoServidor)---D c
+|---
+| [Cliente sin configurar]
+| 
+| c - -EnumError.CLIENTE_SIN_CONFIGURAR- -D v
+|---
+| [Valor inválido]
+|
+| c - -EnumError.VALOR_INVALIDO- -D v
+|---
+| [Conexión existente]
+|
+| c - -EnumError.CONEXION_EXISTENTE- -D v
+|---
+| [Se conecta al servidor]
+|
+| c ---conectarseAServidor(controladorServidor, ipDeCliente, puertoDeCliente)---D cc
+| cc ---registrarObservador(ipDeCliente, puertoDeCliente)---> cs (1)
+| |---(1)
+| | [Sala llena]
+| | 
+| | cs - -EnumError.SALA_LLENA- -> cc, c, v
+| |---
+| | [Socket ya registrado]
+| |
+| | cs - -EnumError.SOCKET_DUPLICADO- -> cc, c, v
+| |---
+| | [Registración exitosa]
+| | /* Se guarda un identificador único que esté vinculado
+| |  * con el observador.
+| |  */ 
+| |
+| | cs - -EnumError.SIN_ERROR- -> cc, c, v
+| |---
+|---

@@ -1,11 +1,15 @@
 package ajedrez.servidor;
 
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import ajedrez.modelo.EnumError;
-import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 
-public interface IControladorServidor extends IObservableRemoto {
+public interface IControladorServidor extends Remote {
 
-    EnumError ping() throws RemoteException;
+    EnumError verificarConexion() throws RemoteException;
+
+    EnumError registrarJugador(String nombre) throws RemoteException;
+
+    EnumError registrarObservador(String ipDeCliente, int puertoDeCliente) throws RemoteException;
 
 }

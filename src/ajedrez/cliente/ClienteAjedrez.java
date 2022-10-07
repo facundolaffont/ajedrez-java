@@ -1,10 +1,10 @@
 package ajedrez.cliente;
 
-import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import ajedrez.controlador.ControladorCliente;
 import ajedrez.modelo.EnumError;
-import ar.edu.unlu.rmimvc.RMIMVCException;
-import ar.edu.unlu.rmimvc.cliente.Cliente;
+import ajedrez.servidor.IControladorServidor;
 
 public class ClienteAjedrez implements IClienteAjedrez {
 	
@@ -15,7 +15,8 @@ public class ClienteAjedrez implements IClienteAjedrez {
 		_controlador = controlador;
 		_ipCliente = null;
 		_puertoCliente = 0;
-		_clienteRMIMVC = null;
+		_ipServidor = null;
+		_puertoServidor = 0;
 	}
 
 	/**
@@ -28,10 +29,12 @@ public class ClienteAjedrez implements IClienteAjedrez {
 	 * 		VALOR_INVALIDO - ipServidor es nulo, o puertoServidor es menor a 1025 o mayor a 65535;
 	 * 		CONEXION_EXISTENTE - Ya existe una conexión con un servidor.
 	 * 		ERROR_DE_COMUNICACION - Error de red al intentar conectarse con el servidor;
-	 * 		ERROR_DE_RMI - Error del módulo RMI-MVC;
 	 * 		ERROR_DESCONOCIDO - Cualquier otro error no contemplado en el diseño;
+	 * 		SALA_LLENA - Hay 2 jugadores conectados actualmente;
+   * 		SOCKET_DUPLICADO - El socket utilizado para conectarse ya está registrado;
 	 * 		SIN_ERROR - Conexión exitosa.
 	 */
+	@Override
 	public EnumError conectarseAServidor(String ipServidor, int puertoServidor) {
 
 		// Verifica que el cliente esté configurado.
@@ -42,20 +45,18 @@ public class ClienteAjedrez implements IClienteAjedrez {
 		if(puertoServidor < 1025 || puertoServidor > 65535) return EnumError.VALOR_INVALIDO;
 		
 		// Verifica que no esté actualmente conectado a un servidor.
-		if(_clienteRMIMVC != null) return EnumError.CONEXION_EXISTENTE;
+		if(_ipServidor != null) return EnumError.CONEXION_EXISTENTE;
 
-		// Crea al cliente RMI-MVC.
-		_clienteRMIMVC = new Cliente(_ipCliente, _puertoCliente, ipServidor, puertoServidor);
+        try {
+            Registry registroRMI = LocateRegistry.getRegistry(ipServidor, puertoServidor);
+            _controladorStub = (IControladorServidor) registroRMI.lookup("ControladorServidor");
 
-		// Intenta conectarse con el servidor.
-		boolean ocurrioExcepcion = false;
-		try { _clienteRMIMVC.iniciar(_controlador); }
-		catch (RemoteException e) { ocurrioExcepcion = true; return EnumError.ERROR_DE_COMUNICACION; }
-		catch (RMIMVCException e) { ocurrioExcepcion = true; return EnumError.ERROR_DE_RMI; }
-		catch (Exception e) { ocurrioExcepcion = true; return EnumError.ERROR_DESCONOCIDO; }
-		finally { if(ocurrioExcepcion) _clienteRMIMVC = null; }
+			// Conexión exitosa, se deja registro de los datos del servidor.
+			_ipServidor = ipServidor;
+			_puertoServidor = puertoServidor;
+			return _controlador.conectarseAServidor(_controladorStub, _ipCliente, _puertoCliente);
+        } catch (Exception e) { return EnumError.ERROR_DE_COMUNICACION; }
 
-		return EnumError.SIN_ERROR;
 	}
 
 	/**
@@ -66,21 +67,32 @@ public class ClienteAjedrez implements IClienteAjedrez {
 	 * @return
 	 * 		SIN_ERROR - Configuración exitosa;
 	 * 		VALOR_NULO - ipCliente es nulo;
-	 * 		VALOR_INVALIDO - puertoCliente es menor a 1 o mayor a 65535;
+	 * 		VALOR_INVALIDO - puertoCliente es menor a 1025 o mayor a 65535;
 	 * 		CONEXION_EXISTENTE - Hay una conexión en curso, y no pueden cambiarse los parámetros de conexión.
 	 */
+	@Override
 	public EnumError configurarCliente(String ipCliente, int puertoCliente) {
-		if(_clienteRMIMVC != null) { return EnumError.CONEXION_EXISTENTE; }
+		if(_ipServidor != null) { return EnumError.CONEXION_EXISTENTE; }
 		if(ipCliente == null) { return EnumError.VALOR_NULO; }
-		if(puertoCliente < 1 || puertoCliente > 65535) { return EnumError.VALOR_INVALIDO; }
+		if(puertoCliente < 1025 || puertoCliente > 65535) { return EnumError.VALOR_INVALIDO; }
 		
 		_ipCliente = ipCliente;
 		_puertoCliente = puertoCliente;
 		return EnumError.SIN_ERROR;
 	}
 
-	public EnumError enviarPingAlServidor() {
-		EnumError codigoError = _controlador.pingAlServidor();
+	/**
+	 * Verifica si hay conexion con el servidor.
+	 * 
+	 * @return
+	 * 		SIN_CONEXION - No existe un servidor conectado, todavía;
+	 * 		ERROR_DE_COMUNICACION - Hubo un error al intentar comunicarse con el servidor conectado;
+	 * 		ERROR_DESCONOCIDO - Ocurrió un error no previsto;
+	 * 		SIN_ERROR - Hay conexión con el servidor.
+	 */
+	@Override
+	public EnumError chequearConexionConServidor() {
+		EnumError codigoError = _controlador.verificarConexionConServidor();
 		switch(codigoError) {
 			case SIN_ERROR:
 			case SIN_CONEXION:
@@ -95,7 +107,9 @@ public class ClienteAjedrez implements IClienteAjedrez {
 
 	private String _ipCliente;
 	private int _puertoCliente;
-	private Cliente _clienteRMIMVC;
+	private String _ipServidor;
+	private int _puertoServidor;
 	private ControladorCliente _controlador;
+	private IControladorServidor _controladorStub;
 	
 }

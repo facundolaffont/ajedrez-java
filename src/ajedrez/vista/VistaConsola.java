@@ -49,7 +49,7 @@ public class VistaConsola extends JFrame implements IVista {
 		
 		// Cargar y configurar el ícono de la ventana.		
 		_iconoApp = null;
-		_imgURL = this.getClass().getResource("iconos/iconoApp50px.png");
+		_imgURL = this.getClass().getResource("iconos/iconoApp50px.png"); // TODO: #2 La imagen no se está cargando.
 		if (_imgURL != null) {
 			_iconoApp = new ImageIcon(_imgURL, "Icono de aplicación");
 			this.setIconImage(((ImageIcon) _iconoApp).getImage());
@@ -65,7 +65,7 @@ public class VistaConsola extends JFrame implements IVista {
 		_consola.setBounds(0, 0, 500, 350);
 		_consola.setEditable(false);
 		_consola.setMargin(new Insets(10, 10, 10, 10));
-		_consola.setLineWrap(true); // Si es false, como debería, se colapsa la consola. Corregir.
+		_consola.setLineWrap(true); // TODO: #3 Se colapsa la consola cuando setLineWrap es false.
 		_consola.setTabSize(1);
 		_consola.setBackground(Color.BLACK);
 		_consola.setForeground(Color.WHITE);
@@ -227,7 +227,7 @@ public class VistaConsola extends JFrame implements IVista {
 
 				// Intenta conectarse al servidor.
 				else {
-					EnumError codigoError = _iClienteAjedrez.conectarseAServidor( ip, puerto );
+					EnumError codigoError = _iClienteAjedrez.conectarseAServidor( ip, puerto ); // TODO: #4 No permite conectar después de intento fallido.
 					if( codigoError != EnumError.SIN_ERROR)
 						_consola.append("\n\nError al conectarse con el servidor: " + codigoError.toString() + "."
 							+ "\n"
@@ -257,20 +257,20 @@ public class VistaConsola extends JFrame implements IVista {
 
 		/* Comandos habilitados en todos los estados de partida. */
 
-		// ping
-		if( comando.equals("ping") ) {
+		// chequearconexion, ch
+		if( comando.matches("^(chequearconexion|ch)$") ) {
 			_consola.append("\n\n> " + comando
-				+ "\n\nPing enviado al servidor..."
+				+ "\n\nMensaje de verificación enviado al servidor..."
 				+ "\n"
 			);
-			EnumError codigoError = _iClienteAjedrez.enviarPingAlServidor();
+			EnumError codigoError = _iClienteAjedrez.chequearConexionConServidor();
 			if( codigoError == EnumError.SIN_ERROR )
-				_consola.append("\n\nPing recibido!"
+				_consola.append("\n\nSe recibió respuesta del servidor!"
 					+ "\n"
 				);
 			else
-				_consola.append("\n\nHubo un problema de red: "
-					+ codigoError.toString() + "\n"
+				_consola.append("\n\nOcurrió un problema: "
+					+ codigoError.toString() + ".\n"
 				);
 			_textoComandos.setText("");
 			return;
@@ -337,9 +337,9 @@ public class VistaConsola extends JFrame implements IVista {
 
 		/* Comandos habilitados en todos los estados de partida. */
 
-		// ping
-		_consola.append("\n\n    \"ping\""
-			+ "\n        Envía un mensaje de ping al servidor."
+		// chequearconexion, ch
+		_consola.append("\n\n    (\"chequearconexion\"|\"ch\")"
+			+ "\n        Envía al servidor un mensaje de verificación de estado de la conexión."
 		);
 
 		// conectaraservidor, cs

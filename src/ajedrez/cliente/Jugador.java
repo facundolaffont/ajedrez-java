@@ -2,6 +2,7 @@ package ajedrez.cliente;
 
 import ajedrez.controlador.ControladorCliente;
 import ajedrez.modelo.EnumColorPieza;
+import ajedrez.modelo.EnumError;
 
 public class Jugador implements IJugador {
 
@@ -36,15 +37,25 @@ public class Jugador implements IJugador {
 		_colorDePiezas = colorDePiezas;
 	}
 	
-	public void setNombre(String nombre) {
-		_nombre = nombre;
-	}
-	
 	public void cambiarColor() {
 		_colorDePiezas =
 			_colorDePiezas == EnumColorPieza.BLANCA
 			? EnumColorPieza.NEGRA
 			: EnumColorPieza.BLANCA;
+	}
+	
+	@Override
+	public EnumError setNombre(String nombre) {
+		try {
+			_nombre = nombre;
+			return EnumError.SIN_ERROR;
+		} catch (Exception e) { return EnumError.ERROR_DESCONOCIDO; }
+	}
+
+	@Override
+	public EnumError registrarJugador() {
+		if(_nombre == null) return EnumError.SIN_NOMBRE;
+		return _controlador.registrarJugador(_nombre);
 	}
 
 

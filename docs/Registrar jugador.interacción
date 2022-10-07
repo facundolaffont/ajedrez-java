@@ -1,0 +1,33 @@
+v:Vista
+j:Jugador
+cc:ControladorCliente
+cs:ControladorServidor
+
+v ---registrarJugador()---D j
+|---
+| [El jugador no tiene nombre]
+|
+| j - -EnumError.SIN_NOMBRE- -D v
+|---
+| [El jugador tiene nombre]
+|
+| j ---registrarJugador(nombre)---D cc
+| cc ---registrarJugador(nombre)---> cs (1)
+| |---(1)
+| | [Error de comunicaciones]
+| |
+| | cc - -EnumError.ERROR_DE_COMUNICACION- -D j, v
+| |---
+| | [Hay una partida en curso]
+| |
+| | cs - -EnumError.PARTIDA_EN_CURSO- -D cc, j, v
+| |---
+| | [No hay espacio en la sala]
+| |
+| | cs - -EnumError.SALA_LLENA- -D cc, j, v
+| |---
+| | [El jugador puede ser registrado]
+| |
+| | cs - -EnumError.SIN_ERROR- -D cc, j, v
+| |---
+|---
