@@ -30,6 +30,8 @@ public class ClienteAjedrez implements IClienteAjedrez {
 	 * 		CONEXION_EXISTENTE - Ya existe una conexión con un servidor.
 	 * 		ERROR_DE_COMUNICACION - Error de red al intentar conectarse con el servidor;
 	 * 		ERROR_DESCONOCIDO - Cualquier otro error no contemplado en el diseño;
+	 * 		SALA_LLENA - Hay 2 jugadores conectados actualmente;
+   * 		SOCKET_DUPLICADO - El socket utilizado para conectarse ya está registrado;
 	 * 		SIN_ERROR - Conexión exitosa.
 	 */
 	@Override
@@ -52,12 +54,8 @@ public class ClienteAjedrez implements IClienteAjedrez {
 			// Conexión exitosa, se deja registro de los datos del servidor.
 			_ipServidor = ipServidor;
 			_puertoServidor = puertoServidor;
-			_controlador.setModeloRemoto(_controladorStub);
-
-			return EnumError.SIN_ERROR;
-        } catch (Exception e) {
-			return EnumError.ERROR_DE_COMUNICACION;
-        }
+			return _controlador.conectarseAServidor(_controladorStub, _ipCliente, _puertoCliente);
+        } catch (Exception e) { return EnumError.ERROR_DE_COMUNICACION; }
 
 	}
 

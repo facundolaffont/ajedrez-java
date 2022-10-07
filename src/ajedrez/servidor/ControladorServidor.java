@@ -1,7 +1,7 @@
 package ajedrez.servidor;
 
 import java.rmi.RemoteException;
-import ajedrez.controlador.IControladorCliente;
+import java.util.HashMap;
 import ajedrez.modelo.EnumError;
 
 public class ControladorServidor implements IControladorServidor {
@@ -40,9 +40,42 @@ public class ControladorServidor implements IControladorServidor {
         return EnumError.SIN_ERROR; // El jugador pudo ser registrado.
     }
 
+    /**
+     * Registra al host como observador si no está llena la sala
+     * o si no hay otro socket idéntico registrado.
+     *
+     * @param ipDeCliente IPv4 del host que se quiere registrar.
+     * @param puertoDeCliente Puerto del host que se quiere registrar.
+     *
+     * @return
+     *    SALA_LLENA - Hay 2 hosts conectados;
+     *    SOCKET_DUPLICADO - Se intentó conectar con un host que ya existe;
+     *    SIN_ERROR;
+     */
     @Override
-    public EnumError registrarObservador(IControladorCliente controlador) throws RemoteException {
-        return EnumError.SIN_ERROR;
+    public EnumError registrarObservador(String ipDeCliente, int puertoDeCliente) throws RemoteException {
+      if (_observadores.size() == 2) return EnumError.SALA_LLENA;
+
+      Socket nuevoCliente = new Socket(ipDeCliente, puertoDeCliente);
+      if (_observadores.containsKey(nuevoCliente)) return EnumError.SOCKET_DUPLICADO;
+
+      _observadores.put(nuevoCliente, null);
+      System.out.println("Cliente conectado en socket <" + nuevoCliente.ip + ":" + nuevoCliente.puerto + ">");
+      return EnumError.SIN_ERROR;
+    }
+
+
+    /* Miembros privados. */
+    private HashMap<Socket, String> _observadores = new HashMap<Socket, String>();
+
+    private class Socket {
+        public String ip;
+        public int puerto;
+
+        public Socket(String ip, int puerto) {
+            this.ip = ip;
+            this.puerto = puerto;
+        }
     }
 
 }
