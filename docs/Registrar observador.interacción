@@ -1,0 +1,30 @@
+v:Vista
+c:ClienteAjedrez
+cc:ControladorCliente
+cs:ControladorServidor
+
+v ---conectarseAServidor(ipServidor, puertoServidor)---D c
+|---
+| [Cliente sin configurar]
+| 
+| c ---EnumError.CLIENTE_SIN_CONFIGURAR---D v
+|---
+| [Valor inválido]
+|
+| c ---EnumError.VALOR_INVALIDO---D v
+|---
+| [Conexión existente]
+|
+| c ---EnumError.CONEXION_EXISTENTE---D v
+|---
+| [Se conecta al servidor]
+|
+| c ---setModeloRemoto(controladorServidor)---D cc
+| cc ---registrarObservador(controlador)---> cs (1)
+| |---(1)
+| | [Registración exitosa]
+| | /* Se guarda el objeto en un arreglo
+| |
+| | cs ---EnumError.SIN_ERROR---> cc, c, v
+| |---
+|---
