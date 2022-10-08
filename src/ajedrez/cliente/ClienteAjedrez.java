@@ -2,9 +2,8 @@ package ajedrez.cliente;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import ajedrez.controlador.ControladorCliente;
-import ajedrez.modelo.EnumError;
-import ajedrez.servidor.IControladorServidor;
+import ajedrez.compartido.EnumError;
+import ajedrez.compartido.IControladorServidor;
 
 public class ClienteAjedrez implements IClienteAjedrez {
 	

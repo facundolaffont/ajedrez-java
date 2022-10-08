@@ -1,6 +1,4 @@
-package ajedrez.controlador;
-
-import ajedrez.modelo.EnumError;
+package ajedrez.compartido;
 
 public class Terminador {
 

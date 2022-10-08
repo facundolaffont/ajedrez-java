@@ -1,24 +1,16 @@
-package ajedrez.cliente;
+package ajedrez.servidor;
 
 import ajedrez.compartido.EnumColorPieza;
-import ajedrez.compartido.EnumError;
 
-public class Jugador implements IJugador {
+class JugadorRegistrado {
 
 
 	/* Miembros públicos. */
 
-	public Jugador(ControladorCliente controlador) {
-		_controlador = controlador;
+	public JugadorRegistrado() {
 		_nombre = null;
 		_colorDePiezas = EnumColorPieza.SIN_COLOR;
     }
-
-	public Jugador(ControladorCliente controlador, String nombre, EnumColorPieza colorDePiezas) {
-		_controlador = controlador;
-		_nombre = nombre;
-		_colorDePiezas = colorDePiezas;
-	}
 	
 	/**
 	 * {@return Devuelve el nombre del jugador, o {@code null},
@@ -32,6 +24,10 @@ public class Jugador implements IJugador {
 		return _colorDePiezas;
 	}
 
+	public void setNombre(String nombre) {
+		_nombre = nombre;
+	}
+	
 	public void setColorDePiezas(EnumColorPieza colorDePiezas) {
 		_colorDePiezas = colorDePiezas;
 	}
@@ -43,19 +39,10 @@ public class Jugador implements IJugador {
 			: EnumColorPieza.BLANCA;
 	}
 
-	@Override
-	public EnumError registrarJugador(String nombre) {
-        EnumError retorno = _controlador.registrarJugador(nombre);
-        if (retorno == EnumError.SIN_ERROR) _nombre = nombre;
-        
-		return retorno;
-	}
-
 
 	/* Miembros privados. */
 
 	private String _nombre;
 	private EnumColorPieza _colorDePiezas;
-	private ControladorCliente _controlador;
 
 }

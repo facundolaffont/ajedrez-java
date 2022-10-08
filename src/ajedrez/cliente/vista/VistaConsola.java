@@ -1,4 +1,4 @@
-package ajedrez.vista;
+package ajedrez.cliente.vista;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -18,11 +18,11 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.text.DefaultCaret;
 import ajedrez.cliente.IClienteAjedrez;
+import ajedrez.cliente.IControladorCliente;
 import ajedrez.cliente.IJugador;
-import ajedrez.controlador.IControladorCliente;
-import ajedrez.controlador.Terminador;
-import ajedrez.modelo.EnumError;
-import ajedrez.modelo.EnumEstadoDeJuego;
+import ajedrez.compartido.EnumError;
+import ajedrez.compartido.EnumEstadoDeJuego;
+import ajedrez.compartido.Terminador;
 
 public class VistaConsola extends JFrame implements IVista {
 	

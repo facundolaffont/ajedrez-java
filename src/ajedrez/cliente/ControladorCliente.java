@@ -1,12 +1,11 @@
-package ajedrez.controlador;
+package ajedrez.cliente;
 
 import java.rmi.RemoteException;
-import ajedrez.cliente.ClienteAjedrez;
-import ajedrez.cliente.Jugador;
-import ajedrez.modelo.EnumError;
-import ajedrez.servidor.IControladorServidor;
-import ajedrez.vista.IVista;
-import ajedrez.vista.VistaConsola;
+
+import ajedrez.cliente.vista.IVista;
+import ajedrez.cliente.vista.VistaConsola;
+import ajedrez.compartido.EnumError;
+import ajedrez.compartido.IControladorServidor;
 
 public class ControladorCliente implements IObservador, IControladorCliente {
 

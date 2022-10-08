@@ -1,4 +1,4 @@
-package ajedrez.modelo;
+package ajedrez.compartido;
 
 public enum EnumEstadoDeJuego {
 	SIN_ESTADO,

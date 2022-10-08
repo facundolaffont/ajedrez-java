@@ -1,4 +1,4 @@
-package ajedrez.controlador;
+package ajedrez.cliente;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
