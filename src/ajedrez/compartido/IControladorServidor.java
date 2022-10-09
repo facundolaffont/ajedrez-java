@@ -7,8 +7,8 @@ public interface IControladorServidor extends Remote {
 
     EnumError verificarConexion() throws RemoteException;
 
-    EnumError registrarJugador(String nombre) throws RemoteException;
+    EnumError registrarJugador(String socket, String nombre) throws RemoteException;
 
-    EnumError registrarObservador(String ipDeCliente, int puertoDeCliente) throws RemoteException;
+    EnumError registrarObservador(String socket) throws RemoteException;
 
 }

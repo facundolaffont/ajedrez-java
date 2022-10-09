@@ -3,7 +3,7 @@ package ajedrez.cliente;
 import ajedrez.compartido.EnumColorPieza;
 import ajedrez.compartido.EnumError;
 
-public class Jugador implements IJugador {
+class Jugador implements IJugador {
 
 
 	/* Miembros públicos. */

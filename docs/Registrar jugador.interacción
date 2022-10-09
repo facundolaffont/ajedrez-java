@@ -5,7 +5,7 @@ cs:ControladorServidor
 
 v ---registrarJugador(nombre)---D j
 j ---registrarJugador(nombre)---D cc
-cc ---registrarJugador(nombre)---> cs (1)
+cc ---registrarJugador(nombre, socket)---> cs (1)
 |---(1)
 | [Error de comunicaciones]
 |

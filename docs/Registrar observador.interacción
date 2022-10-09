@@ -19,8 +19,8 @@ v ---conectarseAServidor(ipServidor, puertoServidor)---D c
 |---
 | [Se conecta al servidor]
 |
-| c ---conectarseAServidor(controladorServidor, ipDeCliente, puertoDeCliente)---D cc
-| cc ---registrarObservador(ipDeCliente, puertoDeCliente)---> cs (1)
+| c ---conectarseAServidor(controladorServidor, socket)---D cc
+| cc ---registrarObservador(socket)---> cs (1)
 | |---(1)
 | | [Sala llena]
 | | 
@@ -30,10 +30,8 @@ v ---conectarseAServidor(ipServidor, puertoServidor)---D c
 | |
 | | cs - -EnumError.SOCKET_DUPLICADO- -> cc, c, v
 | |---
-| | [Registración exitosa]
-| | /* Se guarda un identificador único que esté vinculado
-| |  * con el observador.
-| |  */ 
+| | [Se puede registrar]
+| | // Se guarda el socket como identificador del observador.
 | |
 | | cs - -EnumError.SIN_ERROR- -> cc, c, v
 | |---

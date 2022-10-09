@@ -27,11 +27,13 @@ class ControladorServidor implements IControladorServidor {
     }
 
     @Override
-    public EnumError registrarJugador(String nombre) throws RemoteException {
+    public EnumError registrarJugador(String nombre, String socket) throws RemoteException {
         if (_juego.getEstadoDeJuego() != EnumEstadoDeJuego.SIN_PARTIDA)
             return EnumError.PARTIDA_EN_CURSO;
 
-        // Vincular host con nombre.
+        _observadores
+            .get(socket)
+            .setNombre(nombre);
 
         return EnumError.SIN_ERROR;
     }
@@ -49,22 +51,23 @@ class ControladorServidor implements IControladorServidor {
      *    SIN_ERROR;
      */
     @Override
-    public EnumError registrarObservador(String ipDeCliente, int puertoDeCliente) throws RemoteException {
+    public EnumError registrarObservador(String socket) throws RemoteException {
       if (_observadores.size() == 2) return EnumError.SALA_LLENA;
 
-      _Socket nuevoCliente = new _Socket(ipDeCliente, puertoDeCliente);
-      if (_observadores.containsKey(nuevoCliente)) return EnumError.SOCKET_DUPLICADO;
+      //_Socket nuevoCliente = new _Socket(ipDeCliente, puertoDeCliente);
+      if (_observadores.containsKey(socket)) return EnumError.SOCKET_DUPLICADO;
 
-      _observadores.put(nuevoCliente, new JugadorRegistrado());
-      System.out.println("Cliente conectado en socket <" + nuevoCliente.ip + ":" + nuevoCliente.puerto + ">");
+      _observadores.put(socket, new JugadorRegistrado());
+      System.out.println("Cliente conectado en socket " + socket);
       return EnumError.SIN_ERROR;
     }
 
 
     /* Miembros privados. */
-    private HashMap<_Socket, JugadorRegistrado> _observadores = new HashMap<_Socket, JugadorRegistrado>();
+    private HashMap<String, JugadorRegistrado> _observadores = new HashMap<String, JugadorRegistrado>();
     private Juego _juego;
 
+    /*
     private class _Socket {
         public String ip;
         public int puerto;
@@ -74,5 +77,6 @@ class ControladorServidor implements IControladorServidor {
             this.puerto = puerto;
         }
     }
+    */
 
 }

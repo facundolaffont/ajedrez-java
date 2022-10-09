@@ -5,7 +5,7 @@ import java.rmi.registry.Registry;
 import ajedrez.compartido.EnumError;
 import ajedrez.compartido.IControladorServidor;
 
-public class ClienteAjedrez implements IClienteAjedrez {
+class ClienteAjedrez implements IClienteAjedrez {
 	
 
 	/* Miembros públicos */
@@ -53,7 +53,7 @@ public class ClienteAjedrez implements IClienteAjedrez {
 			// Conexión exitosa, se deja registro de los datos del servidor.
 			_ipServidor = ipServidor;
 			_puertoServidor = puertoServidor;
-			return _controlador.conectarseAServidor(_controladorStub, _ipCliente, _puertoCliente);
+			return _controlador.conectarseAServidor(_controladorStub, "<" +_ipCliente + ":" + _puertoCliente + ">");
         } catch (Exception e) { return EnumError.ERROR_DE_COMUNICACION; }
 
 	}
@@ -99,6 +99,10 @@ public class ClienteAjedrez implements IClienteAjedrez {
 				return codigoError;
 			default: return EnumError.ERROR_DESCONOCIDO;
 		}
+	}
+
+	public String getSocket() {
+		return "<" + _ipCliente + ":" + _puertoCliente + ">";
 	}
 
 

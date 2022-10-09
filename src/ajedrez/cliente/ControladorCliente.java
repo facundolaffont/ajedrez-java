@@ -7,7 +7,7 @@ import ajedrez.cliente.vista.VistaConsola;
 import ajedrez.compartido.EnumError;
 import ajedrez.compartido.IControladorServidor;
 
-public class ControladorCliente implements IObservador, IControladorCliente {
+class ControladorCliente implements IObservador, IControladorCliente {
 
 
     /* Miembros públicos. */
@@ -15,9 +15,9 @@ public class ControladorCliente implements IObservador, IControladorCliente {
     public ControladorCliente() {
         _iControladorServidor = null;
 
-        ClienteAjedrez clienteAjedrez = new ClienteAjedrez(this);
+        _clienteAjedrez = new ClienteAjedrez(this);
         _jugador = new Jugador(this);
-        _iVista = new VistaConsola(this, _jugador, clienteAjedrez);
+        _iVista = new VistaConsola(this, _jugador, _clienteAjedrez);
         ((VistaConsola) _iVista).mostrarVentana();
     }
     
@@ -33,10 +33,10 @@ public class ControladorCliente implements IObservador, IControladorCliente {
      */
     public <T extends IControladorServidor> EnumError conectarseAServidor
       (
-        T controladorServidor, String ipDeCliente, int puertoDeCliente
+        T controladorServidor, String socket
       ) {
         _iControladorServidor = (IControladorServidor) controladorServidor;
-        try { return _iControladorServidor.registrarObservador(ipDeCliente, puertoDeCliente); }
+        try { return _iControladorServidor.registrarObservador(socket); }
         catch (RemoteException e) { return EnumError.ERROR_DE_COMUNICACION; }
     }
 
@@ -73,7 +73,12 @@ public class ControladorCliente implements IObservador, IControladorCliente {
      *		SIN_ERROR
      */
   public EnumError registrarJugador(String nombre) {
-      try { return _iControladorServidor.registrarJugador(nombre); }
+      try {
+        return _iControladorServidor.registrarJugador(
+          nombre,
+          _clienteAjedrez.getSocket()
+        );
+      }
       catch (RemoteException e) { return EnumError.ERROR_DE_COMUNICACION; }
   }
 
@@ -86,6 +91,7 @@ public class ControladorCliente implements IObservador, IControladorCliente {
 
   /* Miembros privados. */
 
+  private ClienteAjedrez _clienteAjedrez;
   private IControladorServidor _iControladorServidor;
   private Jugador _jugador;
   private IVista _iVista;

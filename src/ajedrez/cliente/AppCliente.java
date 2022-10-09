@@ -1,6 +1,6 @@
 package ajedrez.cliente;
 
-public class AppCliente {
+class AppCliente {
 
     public static void main(String[] args) {
         new ControladorCliente();
