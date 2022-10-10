@@ -1,4 +1,4 @@
-package ajedrez.controlador;
+package ajedrez.cliente;
 
 /**
  * Con esta interfaz interactuará la vista para

@@ -2,12 +2,10 @@ package ajedrez.cliente;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import ajedrez.controlador.ControladorCliente;
-import ajedrez.modelo.EnumError;
-import ajedrez.servidor.IControladorServidor;
+import ajedrez.compartido.EnumError;
+import ajedrez.compartido.IControladorServidor;
 
-public class ClienteAjedrez implements IClienteAjedrez {
-	
+class ClienteAjedrez implements IClienteAjedrez {
 
 	/* Miembros públicos */
 
@@ -51,10 +49,19 @@ public class ClienteAjedrez implements IClienteAjedrez {
             Registry registroRMI = LocateRegistry.getRegistry(ipServidor, puertoServidor);
             _controladorStub = (IControladorServidor) registroRMI.lookup("ControladorServidor");
 
-			// Conexión exitosa, se deja registro de los datos del servidor.
+			// Se intenta conectar.
 			_ipServidor = ipServidor;
 			_puertoServidor = puertoServidor;
-			return _controlador.conectarseAServidor(_controladorStub, _ipCliente, _puertoCliente);
+			EnumError codigoError = _controlador.conectarseAServidor(_controladorStub, "<" +_ipCliente + ":" + _puertoCliente + ">");
+
+			// Verifica resultado de la conexión y devuelve el correspondiente código de error.
+			if (codigoError == EnumError.SIN_ERROR) return codigoError;
+			else {
+				_ipServidor = null;
+				_puertoServidor = 0;
+				return codigoError;
+			}
+
         } catch (Exception e) { return EnumError.ERROR_DE_COMUNICACION; }
 
 	}
@@ -100,6 +107,10 @@ public class ClienteAjedrez implements IClienteAjedrez {
 				return codigoError;
 			default: return EnumError.ERROR_DESCONOCIDO;
 		}
+	}
+
+	public String getSocket() {
+		return "<" + _ipCliente + ":" + _puertoCliente + ">";
 	}
 
 

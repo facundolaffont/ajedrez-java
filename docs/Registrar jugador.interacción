@@ -3,31 +3,27 @@ j:Jugador
 cc:ControladorCliente
 cs:ControladorServidor
 
-v ---registrarJugador()---D j
+v ---registrarJugador(nombre)---D j
+j ---registrarJugador(nombre)---D cc
 |---
-| [El jugador no tiene nombre]
+| [No hay conexión establecida todavía]
 |
-| j - -EnumError.SIN_NOMBRE- -D v
+| cc - -EnumError.SIN_CONEXION- -D j
 |---
-| [El jugador tiene nombre]
+| [Hay conexión establecida]
 |
-| j ---registrarJugador(nombre)---D cc
-| cc ---registrarJugador(nombre)---> cs (1)
+| cc ---registrarJugador(nombre, socket)---> cs (1)
 | |---(1)
 | | [Error de comunicaciones]
 | |
-| | cc - -EnumError.ERROR_DE_COMUNICACION- -D j, v
+| | cc - -EnumError.ERROR_DE_COMUNICACION- -> j, v
 | |---
 | | [Hay una partida en curso]
 | |
-| | cs - -EnumError.PARTIDA_EN_CURSO- -D cc, j, v
-| |---
-| | [No hay espacio en la sala]
-| |
-| | cs - -EnumError.SALA_LLENA- -D cc, j, v
+| | cs - -EnumError.PARTIDA_EN_CURSO- -> cc, j, v
 | |---
 | | [El jugador puede ser registrado]
 | |
-| | cs - -EnumError.SIN_ERROR- -D cc, j, v
+| | cs - -EnumError.SIN_ERROR- -> cc, j, v
 | |---
 |---

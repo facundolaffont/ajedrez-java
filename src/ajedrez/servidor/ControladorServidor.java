@@ -2,12 +2,17 @@ package ajedrez.servidor;
 
 import java.rmi.RemoteException;
 import java.util.HashMap;
-import ajedrez.modelo.EnumError;
+import ajedrez.compartido.EnumError;
+import ajedrez.compartido.EnumEstadoDeJuego;
+import ajedrez.compartido.IControladorServidor;
 
-public class ControladorServidor implements IControladorServidor {
-
+class ControladorServidor implements IControladorServidor {
 
     /* Miembros públicos. */
+
+    public ControladorServidor() {
+        _juego = new Juego();
+    }
 
     /**
      * Sólo devuelve un valor para verificar que la conexión está en
@@ -21,23 +26,15 @@ public class ControladorServidor implements IControladorServidor {
     }
 
     @Override
-    public EnumError registrarJugador(String nombre) throws RemoteException {
-        /* Si la sala está llena -> PARTIDA_EN_CURSO
-         *
-         * Si no hay espacio en la sala -> SALA_LLENA
-         * 
-         */
+    public EnumError registrarJugador(String nombre, String socket) throws RemoteException {
+        if (_juego.getEstadoDeJuego() != EnumEstadoDeJuego.SIN_PARTIDA)
+            return EnumError.PARTIDA_EN_CURSO;
 
-        /* Armar una estructura que mapee el ID del objeto que llama a un jugador.
-         * Crearía un jugador nuevo y lo guardaría en ese lugar, sin importar
-         * si ya hay un objeto ahí o no porque dicha referencia, al perderse,
-         * se limpiaría gracias al colector de basura.
-         * 
-         * También debería crear un objeto Juego, y el controlador debería
-         * conocerlo y crearlo ni bien se crea el controlador.
-         */
+        _observadores
+            .get(socket)
+            .setNombre(nombre);
 
-        return EnumError.SIN_ERROR; // El jugador pudo ser registrado.
+        return EnumError.SIN_ERROR;
     }
 
     /**
@@ -53,29 +50,20 @@ public class ControladorServidor implements IControladorServidor {
      *    SIN_ERROR;
      */
     @Override
-    public EnumError registrarObservador(String ipDeCliente, int puertoDeCliente) throws RemoteException {
-      if (_observadores.size() == 2) return EnumError.SALA_LLENA;
+    public EnumError registrarObservador(String socket) throws RemoteException {
+        if (_observadores.size() == 2) return EnumError.SALA_LLENA;
 
-      Socket nuevoCliente = new Socket(ipDeCliente, puertoDeCliente);
-      if (_observadores.containsKey(nuevoCliente)) return EnumError.SOCKET_DUPLICADO;
+        //_Socket nuevoCliente = new _Socket(ipDeCliente, puertoDeCliente);
+        if (_observadores.containsKey(socket)) return EnumError.SOCKET_DUPLICADO;
 
-      _observadores.put(nuevoCliente, null);
-      System.out.println("Cliente conectado en socket <" + nuevoCliente.ip + ":" + nuevoCliente.puerto + ">");
-      return EnumError.SIN_ERROR;
+        _observadores.put(socket, new JugadorRegistrado());
+        System.out.println("Cliente conectado en socket " + socket + ".");
+        return EnumError.SIN_ERROR;
     }
 
 
     /* Miembros privados. */
-    private HashMap<Socket, String> _observadores = new HashMap<Socket, String>();
-
-    private class Socket {
-        public String ip;
-        public int puerto;
-
-        public Socket(String ip, int puerto) {
-            this.ip = ip;
-            this.puerto = puerto;
-        }
-    }
+    private HashMap<String, JugadorRegistrado> _observadores = new HashMap<String, JugadorRegistrado>();
+    private Juego _juego;
 
 }

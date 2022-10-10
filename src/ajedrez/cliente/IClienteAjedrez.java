@@ -1,6 +1,6 @@
 package ajedrez.cliente;
 
-import ajedrez.modelo.EnumError;
+import ajedrez.compartido.EnumError;
 
 public interface IClienteAjedrez {
 
