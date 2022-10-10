@@ -8,7 +8,6 @@ import ajedrez.compartido.Terminador;
 
 class ServidorAjedrez {
 
-
 	/* Miembros públicos. */
 
 	public static void main(String[] args) throws InterruptedException {

@@ -1,14 +1,12 @@
 package ajedrez.cliente;
 
 import java.rmi.RemoteException;
-
 import ajedrez.cliente.vista.IVista;
 import ajedrez.cliente.vista.VistaConsola;
 import ajedrez.compartido.EnumError;
 import ajedrez.compartido.IControladorServidor;
 
 class ControladorCliente implements IObservador, IControladorCliente {
-
 
     /* Miembros públicos. */
     
@@ -32,68 +30,70 @@ class ControladorCliente implements IObservador, IControladorCliente {
      * 		SIN_ERROR.
      */
     public <T extends IControladorServidor> EnumError conectarseAServidor
-      (
-        T controladorServidor, String socket
-      ) {
-        _iControladorServidor = (IControladorServidor) controladorServidor;
-        try { return _iControladorServidor.registrarObservador(socket); }
-        catch (RemoteException e) { return EnumError.ERROR_DE_COMUNICACION; }
+        (
+            T controladorServidor, String socket
+        ) {
+            _iControladorServidor = (IControladorServidor) controladorServidor;
+            try { return _iControladorServidor.registrarObservador(socket); }
+            catch (RemoteException e) { return EnumError.ERROR_DE_COMUNICACION; }
     }
 
     /**
      * Verifica el estado de la conexión con el servidor.
      * 
      * @return
-     * 		SIN_CONEXION - No existe un servidor conectado, todavía;
+     *    SIN_CONEXION - No existe un servidor conectado, todavía;
      * 		ERROR_DE_COMUNICACION - Hubo un error al intentar comunicarse con el servidor conectado;
      * 		ERROR_DESCONOCIDO - Ocurrió un error no previsto;
      * 		SIN_ERROR - Hay conexión con el servidor.
      */
-  public EnumError verificarConexionConServidor() {
-    if(_iControladorServidor == null) return EnumError.SIN_CONEXION;
+    public EnumError verificarConexionConServidor() {
+        if(_iControladorServidor == null) return EnumError.SIN_CONEXION;
 
-    try {
-      EnumError codigoError = _iControladorServidor.verificarConexion();
-      switch(codigoError) {
-        case SIN_ERROR: return codigoError;
-        default: return EnumError.ERROR_DESCONOCIDO;
-      }
+        try {
+            EnumError codigoError = _iControladorServidor.verificarConexion();
+            switch(codigoError) {
+                case SIN_ERROR: return codigoError;
+                default: return EnumError.ERROR_DESCONOCIDO;
+            }
+        }
+        catch (RemoteException e) { return EnumError.ERROR_DE_COMUNICACION; }
     }
-    catch (RemoteException e) { return EnumError.ERROR_DE_COMUNICACION; }
-  }
 
     /**
      * Registra un jugador en el servidor.
      * 
      * @param nombre Nombre del jugador que se desea registrar.
      * @return
-     * 		ERROR_DE_COMUNICACION (error al intentar enviar el mensaje al servidor);
-     *		PARTIDA_EN_CURSO;
-     *		SALA_LLENA;
-     *		SIN_ERROR
+     *      SIN_CONEXION - Todavía no se estableció conexión;
+     * 		ERROR_DE_COMUNICACION - Error al intentar enviar el mensaje al servidor;
+     *		PARTIDA_EN_CURSO - No se puede registrar al jugador porque hay una partida en curso;
+     *		SIN_ERROR.
      */
-  public EnumError registrarJugador(String nombre) {
-      try {
-        return _iControladorServidor.registrarJugador(
-          nombre,
-          _clienteAjedrez.getSocket()
-        );
-      }
-      catch (RemoteException e) { return EnumError.ERROR_DE_COMUNICACION; }
-  }
+    public EnumError registrarJugador(String nombre) {
+        if (_iControladorServidor == null) return EnumError.SIN_CONEXION;
 
-  /**
-   * Método llamado por el controlador del servidor para notificar las novedades.
-   */
-  @Override
-  public void actualizar(Object mensaje) {}
+        try {
+            return _iControladorServidor.registrarJugador(
+                nombre,
+                _clienteAjedrez.getSocket()
+            );
+        }
+        catch (RemoteException e) { return EnumError.ERROR_DE_COMUNICACION; }
+    }
+
+    /**
+     * Método llamado por el controlador del servidor para notificar las novedades.
+     */
+    @Override
+    public void actualizar(Object mensaje) {}
 
 
-  /* Miembros privados. */
+    /* Miembros privados. */
 
-  private ClienteAjedrez _clienteAjedrez;
-  private IControladorServidor _iControladorServidor;
-  private Jugador _jugador;
-  private IVista _iVista;
+    private ClienteAjedrez _clienteAjedrez;
+    private IControladorServidor _iControladorServidor;
+    private Jugador _jugador;
+    private IVista _iVista;
 
 }

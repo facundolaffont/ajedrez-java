@@ -5,17 +5,25 @@ cs:ControladorServidor
 
 v ---registrarJugador(nombre)---D j
 j ---registrarJugador(nombre)---D cc
-cc ---registrarJugador(nombre, socket)---> cs (1)
-|---(1)
-| [Error de comunicaciones]
-|
-| cc - -EnumError.ERROR_DE_COMUNICACION- -> j, v
 |---
-| [Hay una partida en curso]
+| [No hay conexión establecida todavía]
 |
-| cs - -EnumError.PARTIDA_EN_CURSO- -> cc, j, v
+| cc - -EnumError.SIN_CONEXION- -D j
 |---
-| [El jugador puede ser registrado]
+| [Hay conexión establecida]
 |
-| cs - -EnumError.SIN_ERROR- -> cc, j, v
+| cc ---registrarJugador(nombre, socket)---> cs (1)
+| |---(1)
+| | [Error de comunicaciones]
+| |
+| | cc - -EnumError.ERROR_DE_COMUNICACION- -> j, v
+| |---
+| | [Hay una partida en curso]
+| |
+| | cs - -EnumError.PARTIDA_EN_CURSO- -> cc, j, v
+| |---
+| | [El jugador puede ser registrado]
+| |
+| | cs - -EnumError.SIN_ERROR- -> cc, j, v
+| |---
 |---

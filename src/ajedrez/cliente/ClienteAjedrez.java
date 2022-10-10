@@ -6,7 +6,6 @@ import ajedrez.compartido.EnumError;
 import ajedrez.compartido.IControladorServidor;
 
 class ClienteAjedrez implements IClienteAjedrez {
-	
 
 	/* Miembros públicos */
 
@@ -50,10 +49,19 @@ class ClienteAjedrez implements IClienteAjedrez {
             Registry registroRMI = LocateRegistry.getRegistry(ipServidor, puertoServidor);
             _controladorStub = (IControladorServidor) registroRMI.lookup("ControladorServidor");
 
-			// Conexión exitosa, se deja registro de los datos del servidor.
+			// Se intenta conectar.
 			_ipServidor = ipServidor;
 			_puertoServidor = puertoServidor;
-			return _controlador.conectarseAServidor(_controladorStub, "<" +_ipCliente + ":" + _puertoCliente + ">");
+			EnumError codigoError = _controlador.conectarseAServidor(_controladorStub, "<" +_ipCliente + ":" + _puertoCliente + ">");
+
+			// Verifica resultado de la conexión y devuelve el correspondiente código de error.
+			if (codigoError == EnumError.SIN_ERROR) return codigoError;
+			else {
+				_ipServidor = null;
+				_puertoServidor = 0;
+				return codigoError;
+			}
+
         } catch (Exception e) { return EnumError.ERROR_DE_COMUNICACION; }
 
 	}

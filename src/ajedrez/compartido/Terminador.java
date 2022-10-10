@@ -2,7 +2,6 @@ package ajedrez.compartido;
 
 public class Terminador {
 
-
     /* Miembros públicos. */
 
     public static Terminador getInstance() {

@@ -25,7 +25,6 @@ import ajedrez.compartido.EnumEstadoDeJuego;
 import ajedrez.compartido.Terminador;
 
 public class VistaConsola extends JFrame implements IVista {
-	
 
 	/* Miembros públicos. */
 	
@@ -239,6 +238,39 @@ public class VistaConsola extends JFrame implements IVista {
 				}
 
 			}
+
+            // registrarjugador, rj
+            else if (comando.matches(
+				"^(registrarjugador|rj)"
+				+ "\\(" + "[a-zA-Z]"
+					+ "("
+						+ "[a-zA-Z0-9_-]"
+						+ "|" + "\\."
+						+ "|" + "\\$"
+						+ "|" + "\\@"
+					+ ")*"
+				+ "\\)" + "$"
+			)) {
+				_consola.append("\n\n> " + comando);
+
+				String nombre = comando.substring(
+					comando.indexOf('(') + 1,
+					comando.indexOf(')')
+				);
+                if(nombre.length() > 20)
+					_consola.append("\n\nEl nombre de usuario no debe tener más de 20 caracteres.");
+				else {
+					EnumError codigoError = _iJugador.registrarJugador(nombre);
+					if( codigoError != EnumError.SIN_ERROR )
+						_consola.append("\n\nError al registrar el jugador: " + codigoError.toString() + "."
+							+ "\n"
+						);
+					else
+						_consola.append("\n\nJugador " + nombre + " registrado exitosamente."
+							+ "\n"
+						);
+				}
+			}
 			
 			// Otro comando, no necesariamente incorrecto.
 			else break;
@@ -315,6 +347,11 @@ public class VistaConsola extends JFrame implements IVista {
 			_consola.append("\n\n    (\"configurarcliente\"|\"conf\") [ip] puerto"
 				+ "\n        Configura la IP y puerto que tendrá el cliente para conectarse al servidor."
 				+ "\n        Si se omite el IP, se toma localhost como IP predeterminada."
+			);
+
+			// registrarjugador, rj
+			_consola.append("\n\n    (\"registrarjugador\"|\"rj\") \"(\" nombre-jugador \")\""
+				+ "\n        Registra el nombre del jugador."
 			);
 
 			// conectaraservidor, cs

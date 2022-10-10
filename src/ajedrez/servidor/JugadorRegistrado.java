@@ -4,7 +4,6 @@ import ajedrez.compartido.EnumColorPieza;
 
 class JugadorRegistrado {
 
-
 	/* Miembros públicos. */
 
 	public JugadorRegistrado() {

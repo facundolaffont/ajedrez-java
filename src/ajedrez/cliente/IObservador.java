@@ -9,6 +9,6 @@ import java.rmi.RemoteException;
  */
 interface IObservador extends Remote {
 
-   public void actualizar(Object mensaje) throws RemoteException;
+    public void actualizar(Object mensaje) throws RemoteException;
 
 }

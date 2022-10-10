@@ -8,7 +8,6 @@ import ajedrez.compartido.IControladorServidor;
 
 class ControladorServidor implements IControladorServidor {
 
-
     /* Miembros públicos. */
 
     public ControladorServidor() {
@@ -52,31 +51,19 @@ class ControladorServidor implements IControladorServidor {
      */
     @Override
     public EnumError registrarObservador(String socket) throws RemoteException {
-      if (_observadores.size() == 2) return EnumError.SALA_LLENA;
+        if (_observadores.size() == 2) return EnumError.SALA_LLENA;
 
-      //_Socket nuevoCliente = new _Socket(ipDeCliente, puertoDeCliente);
-      if (_observadores.containsKey(socket)) return EnumError.SOCKET_DUPLICADO;
+        //_Socket nuevoCliente = new _Socket(ipDeCliente, puertoDeCliente);
+        if (_observadores.containsKey(socket)) return EnumError.SOCKET_DUPLICADO;
 
-      _observadores.put(socket, new JugadorRegistrado());
-      System.out.println("Cliente conectado en socket " + socket);
-      return EnumError.SIN_ERROR;
+        _observadores.put(socket, new JugadorRegistrado());
+        System.out.println("Cliente conectado en socket " + socket + ".");
+        return EnumError.SIN_ERROR;
     }
 
 
     /* Miembros privados. */
     private HashMap<String, JugadorRegistrado> _observadores = new HashMap<String, JugadorRegistrado>();
     private Juego _juego;
-
-    /*
-    private class _Socket {
-        public String ip;
-        public int puerto;
-
-        public _Socket(String ip, int puerto) {
-            this.ip = ip;
-            this.puerto = puerto;
-        }
-    }
-    */
 
 }

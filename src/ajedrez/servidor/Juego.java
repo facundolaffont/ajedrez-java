@@ -22,4 +22,5 @@ class Juego {
     /* Miembros privados. */
 
     private EnumEstadoDeJuego _estadoDelJuego;
+
 }
