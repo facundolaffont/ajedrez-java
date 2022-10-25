@@ -11,4 +11,6 @@ public interface IControladorServidor extends Remote {
 
     EnumError registrarObservador(String socket) throws RemoteException;
 
+    EnumError iniciarPartida() throws RemoteException;
+
 }
