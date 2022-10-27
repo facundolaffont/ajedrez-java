@@ -17,6 +17,8 @@ class ClienteAjedrez implements IClienteAjedrez {
 		_puertoServidor = 0;
 	}
 
+    public boolean hayConexionConServidor() { return _ipServidor == null ? false : true; }
+
 	/**
 	 * Conecta al cliente con el servidor.
 	 * 
@@ -29,7 +31,7 @@ class ClienteAjedrez implements IClienteAjedrez {
 	 * 		ERROR_DE_COMUNICACION - Error de red al intentar conectarse con el servidor;
 	 * 		ERROR_DESCONOCIDO - Cualquier otro error no contemplado en el diseño;
 	 * 		SALA_LLENA - Hay 2 jugadores conectados actualmente;
-   * 		SOCKET_DUPLICADO - El socket utilizado para conectarse ya está registrado;
+     * 		SOCKET_DUPLICADO - El socket utilizado para conectarse ya está registrado;
 	 * 		SIN_ERROR - Conexión exitosa.
 	 */
 	@Override

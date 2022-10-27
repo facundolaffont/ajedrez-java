@@ -7,20 +7,15 @@ import ajedrez.compartido.EnumTipoPieza;
 
 class Alfil extends Pieza {
 	
+	/* Miembros públicos. */
 	
-	/* CONSTRUCTOR */
-	
-	Alfil(EnumColorPieza color) {
+	public Alfil(EnumColorPieza color) {
 		super();
 		this.color = color;
 	}
-
 	
-	/* Métodos abstractos heredados */
-	
-	// Funcionamiento: ver método en superclase.
 	@Override
-	EnumError moverA(char letraFinal, int numeroFinal, EnumEstadoDeJuego estadoDelJuego, boolean realizarMovimiento, boolean calcularJaque) {
+	public EnumError moverA(char letraFinal, int numeroFinal, EnumEstadoDeJuego estadoDelJuego, boolean realizarMovimiento, boolean calcularJaque) {
 		EnumError retorno;
 		boolean movimientoPosible, hayPieza, hayCaptura, quedariaEnJaque;
 		char letraInicial;
@@ -116,15 +111,14 @@ class Alfil extends Pieza {
 		return retorno;
 	}
 	
-	// Funcionamiento: ver método en superclase.
 	@Override
-	EnumTipoPieza consultarTipoDePieza() {
+	public EnumTipoPieza consultarTipoDePieza() {
 		return EnumTipoPieza.ALFIL;
 	}
 
-	// Funcionamiento: ver método en superclase.
 	@Override
-	Pieza devolerCopia() {
+	public Pieza devolerCopia() {
 		return new Alfil(this.color);
 	}
+
 }

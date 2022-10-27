@@ -88,6 +88,20 @@ class ControladorCliente implements IObservador, IControladorCliente {
     @Override
     public void actualizar(Object mensaje) {}
 
+    @Override
+    public EnumError iniciarPartida() {
+
+        if (!_clienteAjedrez.hayConexionConServidor()) return EnumError.SIN_CONEXION;
+        if (_jugador.getNombre() == null) return EnumError.SIN_NOMBRE;
+
+        try {
+            _iControladorServidor.iniciarPartida();
+            return EnumError.SIN_ERROR;
+        }
+        catch (Exception e) { return EnumError.ERROR_DE_COMUNICACION; }
+
+    }
+
 
     /* Miembros privados. */
 

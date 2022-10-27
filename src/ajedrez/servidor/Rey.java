@@ -6,29 +6,17 @@ import ajedrez.compartido.EnumTipoPieza;
 import ajedrez.compartido.EnumEstadoDeJuego;
 
 class Rey extends Pieza {
-	private boolean yaSeMovio;
 	
+	/* Miembros públicos. */
 	
-	/* CONSTRUCTORES */
-	
-	Rey(EnumColorPieza color) {
+	public Rey(EnumColorPieza color) {
 		super();
 		this.color = color;	
 		yaSeMovio = false;
 	}
 	
-	private Rey(EnumColorPieza color, boolean yaSeMovio) {
-		super();
-		this.color = color;
-		this.yaSeMovio = yaSeMovio;
-	}
-
-	
-	/* Métodos abstractos heredados */
-	
-	// Funcionamiento: ver método en superclase.
 	@Override
-	EnumError moverA(char letraFinal, int numeroFinal, EnumEstadoDeJuego estadoDelJuego, boolean realizarMovimiento, boolean calcularJaque) {
+	public EnumError moverA(char letraFinal, int numeroFinal, EnumEstadoDeJuego estadoDelJuego, boolean realizarMovimiento, boolean calcularJaque) {
 		EnumError retorno;
 		boolean movimientoPosible, enroquePosible, hayCaptura, hayPieza,		
 		quedariaEnJaque, estariaEnJaque;
@@ -198,15 +186,25 @@ class Rey extends Pieza {
 		return retorno;
 	}
 	
-	// Funcionamiento: ver método en superclase.
 	@Override
-	EnumTipoPieza consultarTipoDePieza() {
+	public EnumTipoPieza consultarTipoDePieza() {
 		return EnumTipoPieza.REY;
 	}
 
-	// Funcionamiento: ver método en superclase.
 	@Override
-	Pieza devolerCopia() {
+	public Pieza devolerCopia() {
 		return new Rey(this.color, this.yaSeMovio);
 	}
+
+
+	/* Miembros privados. */
+
+	private boolean yaSeMovio;
+
+	private Rey(EnumColorPieza color, boolean yaSeMovio) {
+		super();
+		this.color = color;
+		this.yaSeMovio = yaSeMovio;
+	}
+	
 }

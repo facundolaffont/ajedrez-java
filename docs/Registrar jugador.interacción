@@ -22,6 +22,9 @@ j ---registrarJugador(nombre)---D cc
 | |
 | | cs - -EnumError.PARTIDA_EN_CURSO- -> cc, j, v
 | |---
+| | [El socket no está registrado]
+| |
+| | cs - -EnumError.SIN_CONEXION- -> cc,j,v
 | | [El jugador puede ser registrado]
 | |
 | | cs - -EnumError.SIN_ERROR- -> cc, j, v

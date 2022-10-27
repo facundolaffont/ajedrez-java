@@ -7,19 +7,15 @@ import ajedrez.compartido.EnumEstadoDeJuego;
 
 class Dama extends Pieza {
 	
-	/* CONSTRUCTOR */
+	/* Miembros públicos. */
 	
-	Dama(EnumColorPieza color) {
+	public Dama(EnumColorPieza color) {
 		super();
 		this.color = color;
 	}
 
-	
-	/* Métodos abstractos heredados */
-	
-	// Funcionamiento: ver método en superclase.
 	@Override
-	EnumError moverA(char letraFinal, int numeroFinal, EnumEstadoDeJuego estadoDelJuego, boolean realizarMovimiento, boolean calcularJaque) {
+	public EnumError moverA(char letraFinal, int numeroFinal, EnumEstadoDeJuego estadoDelJuego, boolean realizarMovimiento, boolean calcularJaque) {
 		EnumError retorno;
 		boolean movimientoPosible, hayPieza, hayCaptura, quedariaEnJaque;
 		char letraInicial;

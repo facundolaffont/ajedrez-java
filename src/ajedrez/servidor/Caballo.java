@@ -7,20 +7,15 @@ import ajedrez.compartido.EnumEstadoDeJuego;
 
 class Caballo extends Pieza {
 	
+	/* Miembros públicos. */
 	
-	/* CONSTRUCTOR */
-	
-	Caballo(EnumColorPieza color) {
+	public Caballo(EnumColorPieza color) {
 		super();
 		this.color = color;
 	}
 
-	
-	/* Métodos abstractos heredados */
-	
-	// Funcionamiento: ver método en superclase.
 	@Override
-	EnumError moverA(char letraFinal, int numeroFinal, EnumEstadoDeJuego estadoDelJuego, boolean realizarMovimiento, boolean calcularJaque) {
+	public EnumError moverA(char letraFinal, int numeroFinal, EnumEstadoDeJuego estadoDelJuego, boolean realizarMovimiento, boolean calcularJaque) {
 		EnumError retorno;
 		boolean movimientoPosible, hayCaptura, quedariaEnJaque;
 		char letraInicial;
@@ -96,15 +91,14 @@ class Caballo extends Pieza {
 		return retorno;
 	}
 	
-	// Funcionamiento: ver método en superclase.
 	@Override
-	EnumTipoPieza consultarTipoDePieza() {
+	public EnumTipoPieza consultarTipoDePieza() {
 		return EnumTipoPieza.CABALLO;
 	}
 
-	// Funcionamiento: ver método en superclase.
 	@Override
-	Pieza devolerCopia() {
+	public Pieza devolerCopia() {
 		return new Caballo(this.color);
 	}
+
 }
