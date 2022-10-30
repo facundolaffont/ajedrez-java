@@ -1,7 +1,6 @@
 package ajedrez.cliente;
 
 import ajedrez.compartido.EnumColorPieza;
-import ajedrez.compartido.EnumError;
 
 class Jugador implements IJugador {
 
@@ -46,17 +45,25 @@ class Jugador implements IJugador {
 	 * Registra el nombre de un jugador en el servidor.
 	 * 
 	 * @return
-	 *      SIN_CONEXION - Todavía no se estableció conexión;
-	 * 		ERROR_DE_COMUNICACION - Error al intentar enviar el mensaje al servidor;
-     *		PARTIDA_EN_CURSO - No se puede registrar al jugador porque hay una partida en curso;
-     *		SIN_ERROR.
+     *		0 - Jugador registrado;
+	 *      -1 - Todavía no se estableció conexión con el servidor;
+	 * 		-2 - Error al intentar enviar el mensaje al servidor;
+     *		-3 - Hay una partida en curso;
+	 *		-4 - No existe conexión con el socket especificado.
 	 */
 	@Override
-	public EnumError registrarJugador(String nombre) {
-		EnumError retorno = _controlador.registrarJugador(nombre);
-        if (retorno == EnumError.SIN_ERROR) _nombre = nombre;
-        
-		return retorno;
+	public int registrarJugador(String nombre) {
+		int codigoError = _controlador.registrarJugador(nombre);
+		
+		switch(codigoError) {
+			case -1: return -1;
+			case -2: return -2;
+			case -3: return -3;
+			case -4: return -4;
+		}
+
+		_nombre = nombre;
+		return 0;
 	}
 
 
@@ -65,5 +72,4 @@ class Jugador implements IJugador {
 	private String _nombre;
 	private EnumColorPieza _colorDePiezas;
 	private ControladorCliente _controlador;
-
 }

@@ -3,7 +3,6 @@ package ajedrez.cliente;
 import java.rmi.RemoteException;
 import ajedrez.cliente.vista.IVista;
 import ajedrez.cliente.vista.VistaConsola;
-import ajedrez.compartido.EnumError;
 import ajedrez.compartido.IControladorServidor;
 
 class ControladorCliente implements IObservador, IControladorCliente {
@@ -24,40 +23,46 @@ class ControladorCliente implements IObservador, IControladorCliente {
      * 
      * @param controladorServidor Stub del controlador remoto.
      * @return
-     *    SALA_LLENA - Hay 2 hosts ya registrados;
-     *    SOCKET_DUPLICADO - El socket utilizado para conectarse ya está registrado;
-     * 		ERROR_DE_COMUNICACION - No se pudo enviar el mensaje al controlador remoto;
-     * 		SIN_ERROR.
+     *      0 - Se estableció la conexión y se registró el observador;
+     *      -1 - La sala está llena;
+     *      -2 - El socket utilizado para conectarse ya está registrado;
+     *      -3 - No se pudo enviar el mensaje al servidor.
      */
-    public <T extends IControladorServidor> EnumError conectarseAServidor
+    public <T extends IControladorServidor> int conectarseAServidor
         (
             T controladorServidor, String socket
         ) {
             _iControladorServidor = (IControladorServidor) controladorServidor;
-            try { return _iControladorServidor.registrarObservador(socket); }
-            catch (RemoteException e) { return EnumError.ERROR_DE_COMUNICACION; }
+            try {
+                int codigoError = _iControladorServidor.registrarObservador(socket);
+
+                switch(codigoError) {
+                    case -1: return -1;
+                    case -2: return -2;
+                }
+
+                return 0;
+            }
+            catch (RemoteException e) { return -3; }
     }
 
     /**
      * Verifica el estado de la conexión con el servidor.
      * 
      * @return
-     *    SIN_CONEXION - No existe un servidor conectado, todavía;
-     * 		ERROR_DE_COMUNICACION - Hubo un error al intentar comunicarse con el servidor conectado;
-     * 		ERROR_DESCONOCIDO - Ocurrió un error no previsto;
-     * 		SIN_ERROR - Hay conexión con el servidor.
+     * 		0 - Hay conexión con el servidor;
+     *      -1 - No existe conexión con un servidor;
+     * 		-2 - Hubo un error al intentar comunicarse con el servidor.
      */
-    public EnumError verificarConexionConServidor() {
-        if(_iControladorServidor == null) return EnumError.SIN_CONEXION;
+    public int verificarConexionConServidor() {
+        if(_iControladorServidor == null) return -1;
 
         try {
-            EnumError codigoError = _iControladorServidor.verificarConexion();
-            switch(codigoError) {
-                case SIN_ERROR: return codigoError;
-                default: return EnumError.ERROR_DESCONOCIDO;
-            }
+            _iControladorServidor.verificarConexion();
+            
+            return 0;
         }
-        catch (RemoteException e) { return EnumError.ERROR_DE_COMUNICACION; }
+        catch (RemoteException e) { return -2; }
     }
 
     /**
@@ -65,21 +70,29 @@ class ControladorCliente implements IObservador, IControladorCliente {
      * 
      * @param nombre Nombre del jugador que se desea registrar.
      * @return
-     *      SIN_CONEXION - Todavía no se estableció conexión;
-     * 		ERROR_DE_COMUNICACION - Error al intentar enviar el mensaje al servidor;
-     *		PARTIDA_EN_CURSO - No se puede registrar al jugador porque hay una partida en curso;
-     *		SIN_ERROR.
+     *		0 - Nombre registrado;
+     *      -1 - Todavía no se estableció conexión con el servidor;
+     * 		-2 - Error de comunicación al enviar el mensaje al servidor;
+     *		-3 - Hay una partida en curso;
+     *      -4 - No existe conexión con el socket especificado.
      */
-    public EnumError registrarJugador(String nombre) {
-        if (_iControladorServidor == null) return EnumError.SIN_CONEXION;
+    public int registrarJugador(String nombre) {
+        if (_iControladorServidor == null) return -1;
 
         try {
-            return _iControladorServidor.registrarJugador(
+            int codigoError = _iControladorServidor.registrarJugador(
                 nombre,
                 _clienteAjedrez.getSocket()
             );
+            
+            switch(codigoError) {
+                case -1: return -3;
+                case -2: return -4;
+            }
+
+            return 0;
         }
-        catch (RemoteException e) { return EnumError.ERROR_DE_COMUNICACION; }
+        catch (RemoteException e) { return -2; }
     }
 
     /**
@@ -88,18 +101,23 @@ class ControladorCliente implements IObservador, IControladorCliente {
     @Override
     public void actualizar(Object mensaje) {}
 
+    /**
+     * @return
+     *      0 - Partida iniciada;
+     *      -1 - Todavía no se estableció conexión con el servidor;
+     *      -2 - El jugador todavía no tiene especificado un nombre;
+     *      -3 - Error de comunicación al intentar conectarse con el servidor.
+     */
     @Override
-    public EnumError iniciarPartida() {
-
-        if (!_clienteAjedrez.hayConexionConServidor()) return EnumError.SIN_CONEXION;
-        if (_jugador.getNombre() == null) return EnumError.SIN_NOMBRE;
+    public int iniciarPartida() {
+        if (!_clienteAjedrez.hayConexionConServidor()) return -1;
+        if (_jugador.getNombre() == null) return -2;
 
         try {
             _iControladorServidor.iniciarPartida();
-            return EnumError.SIN_ERROR;
+            return 0;
         }
-        catch (Exception e) { return EnumError.ERROR_DE_COMUNICACION; }
-
+        catch (Exception e) { return -3; }
     }
 
 
@@ -109,5 +127,4 @@ class ControladorCliente implements IObservador, IControladorCliente {
     private IControladorServidor _iControladorServidor;
     private Jugador _jugador;
     private IVista _iVista;
-
 }

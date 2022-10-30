@@ -1,7 +1,6 @@
 package ajedrez.servidor;
 
 import ajedrez.compartido.EnumColorPieza;
-import ajedrez.compartido.EnumError;
 import ajedrez.compartido.EnumTipoPieza;
 import ajedrez.compartido.EnumEstadoDeJuego;
 
@@ -297,6 +296,7 @@ class Tablero {
 	// Este cálculo es especialmente útil cuando a este método se lo llama desde
 	// quedariaEnJaque de la clase Tablero.
 	private boolean estaEnJaque(EnumColorPieza turno, boolean paraCalcularJaqueMate) {
+		/*
 		Pieza rey;
 		int indice, numero;
 		char letra;
@@ -503,7 +503,9 @@ class Tablero {
 		// No está en jaque mate.
 		} else retorno = false;
 		
-		return retorno;
+		*/
+
+		return true;
 	}
 
 	// Devuelve el estado del juego que conoce este tablero.

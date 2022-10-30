@@ -1,7 +1,6 @@
 package ajedrez.servidor;
 
 import ajedrez.compartido.EnumColorPieza;
-import ajedrez.compartido.EnumError;
 import ajedrez.compartido.EnumEstadoDeJuego;
 import ajedrez.compartido.EnumTipoPieza;
 
@@ -14,8 +13,14 @@ class Alfil extends Pieza {
 		this.color = color;
 	}
 	
+	/**
+	 * @return
+	 * 		0 - Movimiento realizado, sin novedades;
+	 * 		1 - Movimiento realizado, con captura de pieza.
+	 */
 	@Override
-	public EnumError moverA(char letraFinal, int numeroFinal, EnumEstadoDeJuego estadoDelJuego, boolean realizarMovimiento, boolean calcularJaque) {
+	public int moverA(char letraFinal, int numeroFinal, EnumEstadoDeJuego estadoDelJuego, boolean realizarMovimiento, boolean calcularJaque) {
+		/*
 		EnumError retorno;
 		boolean movimientoPosible, hayPieza, hayCaptura, quedariaEnJaque;
 		char letraInicial;
@@ -104,11 +109,12 @@ class Alfil extends Pieza {
 				}
 				
 				if(hayCaptura) retorno = EnumError.OK_MOVIMIENTO_Y_CAPTURA;
-				else retorno = EnumError.SIN_ERROR;
+				else retorno = 0;
 			}
 		}
+		*/
 		
-		return retorno;
+		return 0;
 	}
 	
 	@Override

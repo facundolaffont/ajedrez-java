@@ -20,7 +20,6 @@ import javax.swing.text.DefaultCaret;
 import ajedrez.cliente.IClienteAjedrez;
 import ajedrez.cliente.IControladorCliente;
 import ajedrez.cliente.IJugador;
-import ajedrez.compartido.EnumError;
 import ajedrez.compartido.EnumEstadoDeJuego;
 import ajedrez.compartido.Terminador;
 
@@ -179,9 +178,9 @@ public class VistaConsola extends JFrame implements IVista {
 
 				// Configura el cliente.
 				else {
-					EnumError codigoError = _iClienteAjedrez.configurarCliente( ip, puerto );
-					if( codigoError != EnumError.SIN_ERROR )
-						_consola.append("\n\nError al configurar el cliente: " + codigoError.toString() + "."
+					int codigoError = _iClienteAjedrez.configurarCliente( ip, puerto );
+					if( codigoError != 0 )
+						_consola.append("\n\nError al configurar el cliente: " + codigoError + "."
 							+ "\n"
 						);
 					else
@@ -226,9 +225,9 @@ public class VistaConsola extends JFrame implements IVista {
 
 				// Intenta conectarse al servidor.
 				else {
-					EnumError codigoError = _iClienteAjedrez.conectarseAServidor( ip, puerto ); // TODO: #4 No permite conectar después de intento fallido.
-					if( codigoError != EnumError.SIN_ERROR)
-						_consola.append("\n\nError al conectarse con el servidor: " + codigoError.toString() + "."
+					int codigoError = _iClienteAjedrez.conectarseAServidor( ip, puerto ); // TODO: #4 No permite conectar después de intento fallido.
+					if(codigoError != 0)
+						_consola.append("\n\nError al conectarse con el servidor: " + codigoError + "."
 							+ "\n"
 						);
 					else
@@ -260,9 +259,9 @@ public class VistaConsola extends JFrame implements IVista {
                 if(nombre.length() > 20)
 					_consola.append("\n\nEl nombre de usuario no debe tener más de 20 caracteres.");
 				else {
-					EnumError codigoError = _iJugador.registrarJugador(nombre);
-					if( codigoError != EnumError.SIN_ERROR )
-						_consola.append("\n\nError al registrar el jugador: " + codigoError.toString() + "."
+					int codigoError = _iJugador.registrarJugador(nombre);
+					if( codigoError != 0 )
+						_consola.append("\n\nError al registrar el jugador: " + codigoError + "."
 							+ "\n"
 						);
 					else
@@ -295,14 +294,14 @@ public class VistaConsola extends JFrame implements IVista {
 				+ "\n\nMensaje de verificación enviado al servidor..."
 				+ "\n"
 			);
-			EnumError codigoError = _iClienteAjedrez.chequearConexionConServidor();
-			if( codigoError == EnumError.SIN_ERROR )
+			int codigoError = _iClienteAjedrez.chequearConexionConServidor();
+			if( codigoError == 0 )
 				_consola.append("\n\nSe recibió respuesta del servidor!"
 					+ "\n"
 				);
 			else
 				_consola.append("\n\nOcurrió un problema: "
-					+ codigoError.toString() + ".\n"
+					+ codigoError + ".\n"
 				);
 			_textoComandos.setText("");
 			return;

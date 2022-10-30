@@ -1,34 +1,25 @@
 package ajedrez.servidor;
 
 import ajedrez.compartido.EnumColorPieza;
-import ajedrez.compartido.EnumError;
 import ajedrez.compartido.EnumTipoPieza;
 import ajedrez.compartido.EnumEstadoDeJuego;
 
 class Torre extends Pieza {
-	private boolean yaSeMovio;
 	
+	/* Miembros públicos. */
 	
-	/* CONSTRUCTORES */
-	
-	Torre(EnumColorPieza color) {
+	public Torre(EnumColorPieza color) {
 		super();
 		this.color = color;
 		yaSeMovio = false;
 	}
-
-	private Torre(EnumColorPieza color, boolean yaSeMovio) {
-		super();
-		this.color = color;
-		this.yaSeMovio = yaSeMovio;
-	}
-	
 	
 	/* Métodos abstractos heredados */
 	
 	// Funcionamiento: ver método en superclase.
 	@Override
-	EnumError moverA(char letraFinal, int numeroFinal, EnumEstadoDeJuego estadoDelJuego, boolean realizarMovimiento, boolean calcularJaque) {
+	public int moverA(char letraFinal, int numeroFinal, EnumEstadoDeJuego estadoDelJuego, boolean realizarMovimiento, boolean calcularJaque) {
+		/*
 		EnumError retorno;
 		boolean movimientoPosible, hayPieza, hayCaptura, quedariaEnJaque;
 		char letraInicial;
@@ -134,30 +125,29 @@ class Torre extends Pieza {
 				else retorno = EnumError.SIN_ERROR;
 			}
 		}
-		
-		return retorno;
+		*/
+
+		return 0;
 	}
 	
 	// Funcionamiento: ver método en superclase.
 	@Override
-	EnumTipoPieza consultarTipoDePieza() {
+	public EnumTipoPieza consultarTipoDePieza() {
 		return EnumTipoPieza.TORRE;
 	}
 
 	// Funcionamiento: ver método en superclase.
 	@Override
-	Pieza devolerCopia() {
+	public Pieza devolerCopia() {
 		return new Torre(this.color, this.yaSeMovio);
 	}
-
-
-	/* Métodos propios */
 	
 	// Condiciones previas: sólo lo puede llamar el rey cuando realiza un enroque.
 	//
 	// Funcionamiento: realiza la parte final del movimiento del enroque,
 	// una vez que el rey haya realizado la primera parte del enroque.
-	void enrocar() {
+	public void enrocar() {
+		/*
 		char letraActual;
 		int numeroActual;
 		
@@ -173,5 +163,17 @@ class Torre extends Pieza {
 		// Modifica el estado de la torre para indicar que ya se realizó el
 		// primer movimiento.
 		yaSeMovio = true;
+		*/
+	}
+
+	
+	/* Miembros privados. */
+
+	private boolean yaSeMovio;
+
+	private Torre(EnumColorPieza color, boolean yaSeMovio) {
+		super();
+		this.color = color;
+		this.yaSeMovio = yaSeMovio;
 	}
 }

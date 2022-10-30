@@ -1,7 +1,6 @@
 package ajedrez.servidor;
 
 import ajedrez.compartido.EnumColorPieza;
-import ajedrez.compartido.EnumError;
 import ajedrez.compartido.EnumTipoPieza;
 import ajedrez.compartido.EnumEstadoDeJuego;
 
@@ -16,12 +15,12 @@ abstract class Pieza {
 	// Devuelve la letra de la posición en el tablero en
 	// el que se encuentra, si se encuentra en uno; o 'X'
 	// si no se encuentra en un tablero.
-	public char consultarPosicionLetra() { return tablero.consultarPosicionLetra(this); }
+	public char consultarPosicionLetra() { /* return tablero.consultarPosicionLetra(this); */ return ' ' ; }
 	
 	// Devuelve el número de la posición en el tablero en
 	// el que se encuentra, si se encuentra en uno; o 0 si
 	// no se encuentra en un tablero.
-	public int consultarPosicionNumero() { return tablero.consultarPosicionNumero(this); }
+	public int consultarPosicionNumero() { /* return tablero.consultarPosicionNumero(this); */ return 0; }
 
 	public void setTablero(Tablero tablero) { this.tablero = tablero; }
 
@@ -35,10 +34,10 @@ abstract class Pieza {
 	// Quita a la pieza de su tablero, y deja el puntero "tablero"
 	// que se encuentra dentro de la pieza en null.
 	public void quitarDelTablero() {
-
+		/*
 		tablero.quitarPiezaPorInstancia(this);
 		tablero = null;
-
+		*/
 	}
 	
 	// Calcula en cada casilla del tablero, a excepción de la casilla
@@ -46,7 +45,7 @@ abstract class Pieza {
 	// realizar un movimiento. Si hay, al menos uno que se pueda
 	// realizar, esta función devuelve true; si no, devuelve false.
 	public boolean hayAlgunMovimientoValido() {
-		
+		/*
 		boolean retorno = false;
 		for(char letraFinal = 'A'; letraFinal <= 'H'; letraFinal++)
 			for(int numeroFinal = 1; numeroFinal <= 8; numeroFinal++)
@@ -63,31 +62,27 @@ abstract class Pieza {
 					if(resultado == EnumError.SIN_ERROR || resultado == EnumError.OK_MOVIMIENTO_Y_CAPTURA)
 					// Se puede realizar el movimiento.
 						retorno = true;
-				}
-				
-		return retorno;
+				}		
+		*/
 
+		return true;
 	}
+	
+	// Condiciones previas: la letra y número pasados por parámetro deben ser valores
+	// válidos para el tablero de ajedrez (i.e 'A'-'H' y 1-8).
+	//
+	// Funcionamiento: realiza un movimiento de la pieza y devuelve el estado.
+	public abstract int moverA(char letraFinal, int numeroFinal, EnumEstadoDeJuego estadoDelJuego, boolean realizarMovimiento, boolean calcularJaque);
+	
+	// Devuelve el tipo de la pieza.
+	public abstract EnumTipoPieza consultarTipoDePieza();
+	
+	// Devuelve un puntero a una copia nueva de esta pieza.
+	public abstract Pieza devolerCopia();
 
 
 	/* Miembros protegidos. */
 
 	protected EnumColorPieza color;
 	protected Tablero tablero;
-
-	
-	/* Miembros abstractos. */
-	
-	// Condiciones previas: la letra y número pasados por parámetro deben ser valores
-	// válidos para el tablero de ajedrez (i.e 'A'-'H' y 1-8).
-	//
-	// Funcionamiento: realiza un movimiento de la pieza y devuelve el estado.
-	abstract EnumError moverA(char letraFinal, int numeroFinal, EnumEstadoDeJuego estadoDelJuego, boolean realizarMovimiento, boolean calcularJaque);
-	
-	// Devuelve el tipo de la pieza.
-	abstract EnumTipoPieza consultarTipoDePieza();
-	
-	// Devuelve un puntero a una copia nueva de esta pieza.
-	abstract Pieza devolerCopia();
-
 }

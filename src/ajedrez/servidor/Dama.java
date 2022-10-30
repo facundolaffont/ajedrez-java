@@ -1,7 +1,6 @@
 package ajedrez.servidor;
 
 import ajedrez.compartido.EnumColorPieza;
-import ajedrez.compartido.EnumError;
 import ajedrez.compartido.EnumTipoPieza;
 import ajedrez.compartido.EnumEstadoDeJuego;
 
@@ -15,7 +14,8 @@ class Dama extends Pieza {
 	}
 
 	@Override
-	public EnumError moverA(char letraFinal, int numeroFinal, EnumEstadoDeJuego estadoDelJuego, boolean realizarMovimiento, boolean calcularJaque) {
+	public int moverA(char letraFinal, int numeroFinal, EnumEstadoDeJuego estadoDelJuego, boolean realizarMovimiento, boolean calcularJaque) {
+		/*
 		EnumError retorno;
 		boolean movimientoPosible, hayPieza, hayCaptura, quedariaEnJaque;
 		char letraInicial;
@@ -145,19 +145,20 @@ class Dama extends Pieza {
 				else retorno = EnumError.SIN_ERROR;
 			}
 		}
+		*/
 		
-		return retorno;
+		return 0;
 	}
 	
 	// Funcionamiento: ver método en superclase.
 	@Override
-	EnumTipoPieza consultarTipoDePieza() {
+	public EnumTipoPieza consultarTipoDePieza() {
 		return EnumTipoPieza.DAMA;
 	}
 
 	// Funcionamiento: ver método en superclase.
 	@Override
-	Pieza devolerCopia() {
+	public Pieza devolerCopia() {
 		return new Dama(this.color);
 	}
 }

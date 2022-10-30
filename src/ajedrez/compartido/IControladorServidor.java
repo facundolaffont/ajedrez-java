@@ -5,12 +5,12 @@ import java.rmi.RemoteException;
 
 public interface IControladorServidor extends Remote {
 
-    EnumError verificarConexion() throws RemoteException;
+    int verificarConexion() throws RemoteException;
 
-    EnumError registrarJugador(String socket, String nombre) throws RemoteException;
+    int registrarJugador(String socket, String nombre) throws RemoteException;
 
-    EnumError registrarObservador(String socket) throws RemoteException;
+    int registrarObservador(String socket) throws RemoteException;
 
-    EnumError iniciarPartida() throws RemoteException;
+    int iniciarPartida() throws RemoteException;
 
 }

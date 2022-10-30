@@ -1,7 +1,6 @@
 package ajedrez.servidor;
 
 import java.util.HashMap;
-import ajedrez.compartido.EnumError;
 import ajedrez.compartido.EnumEstadoDeJuego;
 
 class Juego {
@@ -21,7 +20,12 @@ class Juego {
         _estadoDelJuego = estadoDelJuego;
     }
 
-    public EnumError iniciarPartida() {
+    /**
+     * 
+     * @return
+     *      0 - Se inicializó la partida.
+     */
+    public int iniciarPartida() {
 
         /*
         if(!salaLlena()) return EnumError.FALTAN_JUGADORES;
@@ -128,16 +132,45 @@ class Juego {
 
         */
 
-        return EnumError.SIN_ERROR; // CAMBIAR.
+        return 0; // CAMBIAR.
 
     }
 
-    public EnumError registrarJugador(String nombre, String socket) {
-        if (!_existeElSocket(socket)) return EnumError.SIN_CONEXION; // TODO: #8 cambiar todos los retornos por valores enteros, e independizar métodos de los retornos de sus llamadas.
+    /**
+     * 
+     * @param nombre
+     * @param socket
+     * @return
+     *      0 - Se registró el jugador;
+     *      -1 - No hay conexión establecida con el socket especificado.
+     */
+    public int registrarJugador(String nombre, String socket) {
+        if (!_existeElSocket(socket)) return -1; // TODO: #8 cambiar todos los retornos por valores enteros, e independizar métodos de los retornos de sus llamadas.
 
-        _jugadoresRegistrados.put(socket, new JugadorRegistrado(nombre));
+        _jugadoresRegistrados
+            .get(socket)
+            .setNombre(nombre);
 
-        return EnumError.SIN_ERROR;
+        return 0;
+    }
+
+    /**
+     * 
+     * @param socket
+     * @return
+     *      0 - Se registró el socket;
+     *      -1 - El socket ya está registrado.
+     */
+    public int registrarSocket(String socket) {
+        if(_jugadoresRegistrados.containsKey(socket)) return -1;
+
+        _jugadoresRegistrados.put(socket, new JugadorRegistrado());
+        return 0;
+    }
+
+    public boolean salaLlena() {
+        if (_jugadoresRegistrados.size() == 2) return true;
+        return false;
     }
 
 

@@ -6,8 +6,8 @@ class JugadorRegistrado {
 
 	/* Miembros públicos. */
 
-	public JugadorRegistrado(String nombre) {
-		_nombre = nombre;
+	public JugadorRegistrado() {
+		_nombre = null;
 		_colorDePiezas = EnumColorPieza.SIN_COLOR;
     }
 	

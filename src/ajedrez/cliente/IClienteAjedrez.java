@@ -1,13 +1,11 @@
 package ajedrez.cliente;
 
-import ajedrez.compartido.EnumError;
-
 public interface IClienteAjedrez {
 
-    EnumError configurarCliente(String ip, int puerto);
+    int configurarCliente(String ip, int puerto);
 
-    EnumError conectarseAServidor(String ip, int puerto);
+    int conectarseAServidor(String ip, int puerto);
 
-    EnumError chequearConexionConServidor();
+    int chequearConexionConServidor();
 
 }

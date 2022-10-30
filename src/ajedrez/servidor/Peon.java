@@ -1,36 +1,23 @@
 package ajedrez.servidor;
 
 import ajedrez.compartido.EnumColorPieza;
-import ajedrez.compartido.EnumError;
 import ajedrez.compartido.EnumTipoPieza;
 import ajedrez.compartido.EnumEstadoDeJuego;
 
 class Peon extends Pieza {
-	private boolean yaSeMovio, primerTurnoLuegoDeSalidaDoble;
 	
+	/* Miembros públicos. */
 	
-	/* CONSTRUCTORES */
-	
-	Peon(EnumColorPieza color) {
+	public Peon(EnumColorPieza color) {
 		super();
 		this.color = color;
 		yaSeMovio = false;
 		primerTurnoLuegoDeSalidaDoble = false;
 	}
 
-	private Peon(EnumColorPieza color, boolean yaSeMovio, boolean primerTurnoLuegoDeSalidaDoble) {
-		super();
-		this.color = color;
-		this.yaSeMovio = yaSeMovio;
-		this.primerTurnoLuegoDeSalidaDoble = primerTurnoLuegoDeSalidaDoble;
-	}
-	
-	
-	/* Métodos abstractos heredados */
-	
-	// Funcionamiento: ver método en superclase.
 	@Override
-	EnumError moverA(char letraFinal, int numeroFinal, EnumEstadoDeJuego estadoDelJuego, boolean realizarMovimiento, boolean calcularJaque) {
+	public int moverA(char letraFinal, int numeroFinal, EnumEstadoDeJuego estadoDelJuego, boolean realizarMovimiento, boolean calcularJaque) {
+		/*
 		EnumError retorno;
 		boolean movimientoPosible, hayCaptura, hayCapturaAlPaso, quedariaEnJaque;
 		char letraInicial;
@@ -250,28 +237,24 @@ class Peon extends Pieza {
 				else retorno = EnumError.SIN_ERROR;
 			}
 		}
+		*/
 		
-		return retorno;
+		return 0;
 	}
 
-	// Funcionamiento: ver método en superclase.
 	@Override
-	EnumTipoPieza consultarTipoDePieza() {
+	public EnumTipoPieza consultarTipoDePieza() {
 		return EnumTipoPieza.PEON;
 	}
 	
-	// Funcionamiento: ver método en superclase.
 	@Override
-	Pieza devolerCopia() {
+	public Pieza devolerCopia() {
 		return new Peon(this.color, this.yaSeMovio, this.primerTurnoLuegoDeSalidaDoble);
 	}
 	
-	
-	/* Métodos propios */
-	
 	// Funcionamiento: devuelve true si es el primer turno del peón,
 	// luego de haber hecho una salida doble.
-	boolean esPrimerTurnoLuegoDeSalidaDoble() {
+	public boolean esPrimerTurnoLuegoDeSalidaDoble() {
 		return primerTurnoLuegoDeSalidaDoble;
 	}
 	
@@ -279,5 +262,17 @@ class Peon extends Pieza {
 	// turno luego de haber hecho una salida doble.
 	void unsetEsPrimerTurnoLuegoDeSalidaDoble() {
 		primerTurnoLuegoDeSalidaDoble = false;
+	}
+
+
+	/* Miembros privados. */
+
+	private boolean yaSeMovio, primerTurnoLuegoDeSalidaDoble;
+
+	private Peon(EnumColorPieza color, boolean yaSeMovio, boolean primerTurnoLuegoDeSalidaDoble) {
+		super();
+		this.color = color;
+		this.yaSeMovio = yaSeMovio;
+		this.primerTurnoLuegoDeSalidaDoble = primerTurnoLuegoDeSalidaDoble;
 	}
 }

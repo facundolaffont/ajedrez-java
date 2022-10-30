@@ -1,7 +1,6 @@
 package ajedrez.servidor;
 
 import ajedrez.compartido.EnumColorPieza;
-import ajedrez.compartido.EnumError;
 import ajedrez.compartido.EnumTipoPieza;
 import ajedrez.compartido.EnumEstadoDeJuego;
 
@@ -15,7 +14,8 @@ class Caballo extends Pieza {
 	}
 
 	@Override
-	public EnumError moverA(char letraFinal, int numeroFinal, EnumEstadoDeJuego estadoDelJuego, boolean realizarMovimiento, boolean calcularJaque) {
+	public int moverA(char letraFinal, int numeroFinal, EnumEstadoDeJuego estadoDelJuego, boolean realizarMovimiento, boolean calcularJaque) {
+		/*
 		EnumError retorno;
 		boolean movimientoPosible, hayCaptura, quedariaEnJaque;
 		char letraInicial;
@@ -87,8 +87,9 @@ class Caballo extends Pieza {
 				else retorno = EnumError.SIN_ERROR;
 			}
 		}
+		*/
 		
-		return retorno;
+		return 0;
 	}
 	
 	@Override

@@ -1,9 +1,6 @@
 package ajedrez.servidor;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import ajedrez.compartido.EnumError;
 import ajedrez.compartido.EnumEstadoDeJuego;
 import ajedrez.compartido.IControladorServidor;
 
@@ -12,8 +9,6 @@ class ControladorServidor implements IControladorServidor {
     /* Miembros públicos. */
 
     public ControladorServidor() {
-        //_observadores = new HashMap<String, JugadorRegistrado>();
-        _socketsClientes = new ArrayList<String>();
         _juego = new Juego();
         _cantJugadoresRegistrados = 0;
     }
@@ -22,20 +17,28 @@ class ControladorServidor implements IControladorServidor {
      * Sólo devuelve un valor para verificar que la conexión está en
      * buen estado.
      * 
-     * @return SIN_ERROR - La conexión está en buen estado.
+     * @return 0 - La conexión está en buen estado.
      */
     @Override
-    public EnumError verificarConexion() throws RemoteException {
-        return EnumError.SIN_ERROR;
+    public int verificarConexion() throws RemoteException {
+        return 0;
     }
 
+    /**
+     * @return
+     *      0 - OK: jugador registrado;
+     *      -1 - Hay una partida en curso;
+     *      -2 - No existe la conexión con el socket especificado.
+     */
     @Override
-    public EnumError registrarJugador(String nombre, String socket) throws RemoteException {
+    public int registrarJugador(String nombre, String socket) throws RemoteException {
         if (_juego.getEstadoDeJuego() != EnumEstadoDeJuego.SIN_PARTIDA)
-            return EnumError.PARTIDA_EN_CURSO;
+            return -1;
 
-        return _juego.registrarJugador(nombre, socket);
-        
+        int codigoError = _juego.registrarJugador(nombre, socket);
+
+        if (codigoError == -1) return -2;
+        else return 0;
     }
 
     /**
@@ -46,43 +49,47 @@ class ControladorServidor implements IControladorServidor {
      * @param puertoDeCliente Puerto del host que se quiere registrar.
      *
      * @return
-     *    SALA_LLENA - Hay 2 hosts conectados;
-     *    SOCKET_DUPLICADO - Se intentó conectar con un host que ya existe;
-     *    SIN_ERROR;
+     *    0 - Observador registrado;
+     *    -1 - Sala llena;
+     *    -2 - El socket ya existe.
      */
     @Override
-    public EnumError registrarObservador(String socket) throws RemoteException {
-        if (_socketsClientes.size() == 2) return EnumError.SALA_LLENA;
+    public int registrarObservador(String socket) throws RemoteException {
+        if (_juego.salaLlena()) return -1;
 
-        //_Socket nuevoCliente = new _Socket(ipDeCliente, puertoDeCliente);
-        for (String socketRegistrado : _socketsClientes) if (socketRegistrado.equals(socket)) return EnumError.SOCKET_DUPLICADO;
+        if(_juego.registrarSocket(socket) == -1) return -2;
 
-        _socketsClientes.add(socket);
         System.out.println("Cliente conectado en socket " + socket + ".");
-        return EnumError.SIN_ERROR;
+        return 0;
     }
 
+    /**
+     * @return
+     *      0 - Partida iniciada;
+     *      -1 - Faltan registrarse jugadores;
+     *      -2 - Hay una partida en curso.
+     */
     @Override
-	public EnumError iniciarPartida() {
-
-        if (_cantJugadoresRegistrados < 2) return EnumError.FALTAN_JUGADORES;
+	public int iniciarPartida() {
+        if (_cantJugadoresRegistrados < 2) return -1;
 
         if (
             _juego.getEstadoDeJuego() != EnumEstadoDeJuego.SIN_PARTIDA
             &&
             _juego.getEstadoDeJuego() != EnumEstadoDeJuego.SIN_ESTADO
-        ) return EnumError.PARTIDA_EN_CURSO;
+        ) return -2;
 
-        return _juego.iniciarPartida();
+        int codigoError = _juego.iniciarPartida();
+        switch(codigoError) {
+            //..
+        }
 
+        return 0;
     }
 
 
     /* Miembros privados. */
 
-    //private HashMap<String, JugadorRegistrado> _observadores;
-    private ArrayList<String> _socketsClientes;
     private Juego _juego;
     private byte _cantJugadoresRegistrados;
-
 }
