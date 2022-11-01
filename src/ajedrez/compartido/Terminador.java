@@ -43,5 +43,4 @@ public class Terminador {
     /* Miembros privados. */
 
     static private Terminador _instancia = new Terminador();
-
 }

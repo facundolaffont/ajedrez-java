@@ -421,5 +421,4 @@ public class VistaConsola extends JFrame implements IVista {
 
 		return true;
 	}
-
 }

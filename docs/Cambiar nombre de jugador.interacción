@@ -1,8 +1,0 @@
-vista:Vista ---setNombre(nombre)---D jugador:Jugador
-+++
-+ [Se pudo cambiar el nombre]
-+ jugador:Jugador ---EnumError.SIN_ERROR---D vista:Vista
-+++
-+ [No se pudo cambiar el nombre]
-+ jugador:Jugador ---EnumError.ERROR_DESCONOCIDO---D vista:Vista
-+++

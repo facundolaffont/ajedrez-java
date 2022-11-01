@@ -12,30 +12,29 @@ class ControladorCliente implements IObservador, IControladorCliente {
     
     public ControladorCliente() {
         _iControladorServidor = null;
-
         _clienteAjedrez = new ClienteAjedrez(this);
         _jugador = new Jugador(this);
         _iVista = new VistaConsola(this, _jugador, _clienteAjedrez);
-        ((VistaConsola) _iVista).mostrarVentana();
+        ( (VistaConsola) _iVista ).mostrarVentana();
     }
     
     /**
      * Registra el stub del controlador remoto y le indica que registre este controlador.
      * 
-     * @param controladorServidor Stub del controlador remoto.
+     * @param controladorServidorStub Stub del controlador remoto.
      * @return
      *      0 - Se estableció la conexión y se registró el observador;
-     *      -1 - La sala está llena;
-     *      -2 - El socket utilizado para conectarse ya está registrado;
-     *      -3 - No se pudo enviar el mensaje al servidor.
+     *     -1 - La sala está llena;
+     *     -2 - El socket utilizado para conectarse ya está registrado;
+     *     -3 - No se pudo enviar el mensaje al servidor.
      */
     public <T extends IControladorServidor> int conectarseAServidor
         (
-            T controladorServidor, String socket
+            T controladorServidorStub, String socketObservador
         ) {
-            _iControladorServidor = (IControladorServidor) controladorServidor;
+            _iControladorServidor = controladorServidorStub;
             try {
-                int codigoError = _iControladorServidor.registrarObservador(socket);
+                int codigoError = _iControladorServidor.registrarObservador(socketObservador);
 
                 switch(codigoError) {
                     case -1: return -1;
@@ -52,8 +51,8 @@ class ControladorCliente implements IObservador, IControladorCliente {
      * 
      * @return
      * 		0 - Hay conexión con el servidor;
-     *      -1 - No existe conexión con un servidor;
-     * 		-2 - Hubo un error al intentar comunicarse con el servidor.
+     *     -1 - No existe conexión con un servidor;
+     * 	   -2 - Hubo un error al intentar comunicarse con el servidor.
      */
     public int verificarConexionConServidor() {
         if(_iControladorServidor == null) return -1;
@@ -72,10 +71,10 @@ class ControladorCliente implements IObservador, IControladorCliente {
      * @param nombre Nombre del jugador que se desea registrar.
      * @return
      *		0 - Nombre registrado;
-     *      -1 - Todavía no se estableció conexión con el servidor;
-     * 		-2 - Error de comunicación al enviar el mensaje al servidor;
-     *		-3 - Hay una partida en curso;
-     *      -4 - No existe conexión con el socket especificado.
+     *     -1 - Todavía no se estableció conexión con el servidor;
+     * 	   -2 - Error de comunicación al enviar el mensaje al servidor;
+     *	   -3 - Hay una partida en curso;
+     *     -4 - No existe conexión con el socket especificado.
      */
     public int registrarJugador(String nombre) {
         if (_iControladorServidor == null) return -1;
@@ -105,9 +104,9 @@ class ControladorCliente implements IObservador, IControladorCliente {
     /**
      * @return
      *      0 - Partida iniciada;
-     *      -1 - Todavía no se estableció conexión con el servidor;
-     *      -2 - El jugador todavía no tiene especificado un nombre;
-     *      -3 - Error de comunicación al intentar conectarse con el servidor.
+     *     -1 - Todavía no se estableció conexión con el servidor;
+     *     -2 - El jugador todavía no tiene especificado un nombre;
+     *     -3 - Error de comunicación al intentar conectarse con el servidor.
      */
     @Override
     public int iniciarPartida() {
@@ -125,7 +124,7 @@ class ControladorCliente implements IObservador, IControladorCliente {
     /* Miembros privados. */
 
     private ClienteAjedrez _clienteAjedrez;
-    private IControladorServidor _iControladorServidor;
     private Jugador _jugador;
+    private IControladorServidor _iControladorServidor;
     private IVista _iVista;
 }

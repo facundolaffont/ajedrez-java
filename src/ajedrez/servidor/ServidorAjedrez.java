@@ -73,13 +73,10 @@ class ServidorAjedrez {
             registroRMI.bind("ControladorServidor", _getControladorServidorStub());
         	System.out.println("Servidor creado en <" + _getIP() + ":" + _getPuerto() + ">.");
         } catch (Exception e) {
-			e.printStackTrace();
-			/*
             Terminador
 				.getInstance()
 				.terminarPorExcepcion(e, e.getMessage());
-			*/
-        } 
+        }
 	}
 
 	public static ServidorAjedrez getInstance() {
@@ -101,35 +98,51 @@ class ServidorAjedrez {
 	}
 
 	private static String _getIP() {
-		return ServidorAjedrez.getInstance()._ip;
+		return ServidorAjedrez
+			.getInstance()
+			._ip;
 	}
 
 	private static int _getPuerto() {
-		return ServidorAjedrez.getInstance()._puerto;
+		return ServidorAjedrez
+			.getInstance()
+			._puerto;
 	}
 
 	private static ControladorServidor _getControladorServidor() {
-		return ServidorAjedrez.getInstance()._controladorServidor;
+		return ServidorAjedrez
+			.getInstance()
+			._controladorServidor;
 	}
 
 	private static IControladorServidor _getControladorServidorStub() {
-		return ServidorAjedrez.getInstance()._controladorServidorStub;
+		return ServidorAjedrez
+			.getInstance()
+			._controladorServidorStub;
 	}
 
 	private static void _setIP(String ip) {
-		ServidorAjedrez.getInstance()._ip = ip;
+		ServidorAjedrez
+			.getInstance()
+			._ip = ip;
 	}
 
 	private static void _setPuerto(int puerto) {
-		ServidorAjedrez.getInstance()._puerto = puerto;
+		ServidorAjedrez
+			.getInstance()
+			._puerto = puerto;
 	}
 
 	private static void _setControladorServidor(ControladorServidor controladorServidor) {
-		ServidorAjedrez.getInstance()._controladorServidor = controladorServidor;
+		ServidorAjedrez
+			.getInstance()
+			._controladorServidor = controladorServidor;
 	}
 
 	private static void _setControladorServidorStub(IControladorServidor controladorServidorStub) {
-		ServidorAjedrez.getInstance()._controladorServidorStub = controladorServidorStub;
+		ServidorAjedrez
+			.getInstance()
+			._controladorServidorStub = controladorServidorStub;
 	}
 
 	/**
@@ -151,5 +164,4 @@ class ServidorAjedrez {
 			.getInstance()
 			.terminarOK();
 	}
-
 }

@@ -43,5 +43,4 @@ class JugadorRegistrado {
 
 	private String _nombre;
 	private EnumColorPieza _colorDePiezas;
-
 }

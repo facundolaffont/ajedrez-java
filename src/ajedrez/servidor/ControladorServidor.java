@@ -30,8 +30,8 @@ class ControladorServidor implements IControladorServidor {
     /**
      * @return
      *      0 - OK: jugador registrado;
-     *      -1 - Hay una partida en curso;
-     *      -2 - No existe la conexión con el socket especificado.
+     *     -1 - Hay una partida en curso;
+     *     -2 - No existe la conexión con el socket especificado.
      */
     @Override
     public int registrarJugador(String nombre, String socket) throws RemoteException {
@@ -52,11 +52,11 @@ class ControladorServidor implements IControladorServidor {
      * @param puertoDeCliente Puerto del host que se quiere registrar.
      *
      * @return
-     *    0 - Observador registrado;
-     *    -1 - Sala llena;
-     *    -2 - El socket ya existe;
-     *    -3 - Formato de socket no válido;
-     *    -4 - Puerto de socket inválido.
+     *      0 - Observador registrado;
+     *     -1 - Sala llena;
+     *     -2 - El socket ya existe;
+     *     -3 - Formato de socket no válido;
+     *     -4 - Puerto de socket inválido.
      */
     @Override
     public int registrarObservador(String socket) throws RemoteException {
@@ -73,7 +73,10 @@ class ControladorServidor implements IControladorServidor {
 
         // Se registra el observador.
         try {
-            Registry registroRMI = LocateRegistry.getRegistry(_obtenerIPdeSocket(socket), _obtenerPuertoDeSocket(socket));
+            Registry registroRMI = LocateRegistry.getRegistry(
+                _obtenerIPdeSocket(socket),
+                _obtenerPuertoDeSocket(socket)
+            );
             IObservador observador;
             observador = (IObservador) registroRMI.lookup("ControladorCliente");
 
@@ -92,8 +95,8 @@ class ControladorServidor implements IControladorServidor {
     /**
      * @return
      *      0 - Partida iniciada;
-     *      -1 - Faltan registrarse jugadores;
-     *      -2 - Hay una partida en curso.
+     *     -1 - Faltan registrarse jugadores;
+     *     -2 - Hay una partida en curso.
      */
     @Override
 	public int iniciarPartida() {

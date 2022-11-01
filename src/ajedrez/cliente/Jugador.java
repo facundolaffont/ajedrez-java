@@ -46,10 +46,10 @@ class Jugador implements IJugador {
 	 * 
 	 * @return
      *		0 - Jugador registrado;
-	 *      -1 - Todavía no se estableció conexión con el servidor;
-	 * 		-2 - Error al intentar enviar el mensaje al servidor;
-     *		-3 - Hay una partida en curso;
-	 *		-4 - No existe conexión con el socket especificado.
+	 *     -1 - Todavía no se estableció conexión con el servidor;
+	 * 	   -2 - Error al intentar enviar el mensaje al servidor;
+     *	   -3 - Hay una partida en curso;
+	 *	   -4 - No existe conexión con el socket especificado.
 	 */
 	@Override
 	public int registrarJugador(String nombre) {
