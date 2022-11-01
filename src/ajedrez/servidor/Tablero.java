@@ -28,7 +28,36 @@ class Tablero {
 			if(p != null)
 				p.setTablero(this);
 	}
-	
+		
+	// Funcionamiento: quita todas las piezas del tablero.
+	public void quitarPiezas() {
+		for(char letra = 'A'; letra <= 'H'; letra++)
+			for(int numero = 1; numero <= 8; numero++)
+				quitarPiezaPorPosicion(letra, numero);
+	}
+
+	// Condiciones previas: la letra y número deben ser valores válidos
+	// para el tablero de ajedrez (i.e. A-H y 1-8).
+	//
+	// Funcionamiento: el apuntador de la celda correspondiente del
+	// arreglo interno apuntará a la pieza pasada como parámetro, si
+	// la celda no apuntaba previamente a ninguna pieza, y el método
+	// devuelve true; o devolverá false si la celda apuntaba a una pieza,
+	// y no se realizan modificaciones en el arreglo interno. La colocación
+	// de una pieza no implica necesariamente que se trata de un movimiento
+	// (esto está pensado así para un eventual uso de colocar piezas por
+	// primera vez en el tablero).
+	public boolean colocarPieza(Pieza pieza, char letra, int numero) {
+		
+		boolean retorno;
+		if(consultarPieza(letra, numero) == null) {
+			_casillas[transformarCoordenadas(letra, numero)] = pieza;
+			retorno = true;
+		} else retorno = false;
+		
+		return retorno;
+	}
+
 	
 	/* Miembros privados. */
 
@@ -106,29 +135,6 @@ class Tablero {
 	// Funcionamiento: devuelve el número de la posición equivalente
 	// del arreglo interno de casillas.
 	private int transformarIndiceANumero(int indice) { return (indice % 8) + 1; }
-	
-	// Condiciones previas: la letra y número deben ser valores válidos
-	// para el tablero de ajedrez (i.e. A-H y 1-8).
-	//
-	// Funcionamiento: el apuntador de la celda correspondiente del
-	// arreglo interno apuntará a la pieza pasada como parámetro, si
-	// la celda no apuntaba previamente a ninguna pieza, y el método
-	// devuelve true; o devolverá false si la celda apuntaba a una pieza,
-	// y no se realizan modificaciones en el arreglo interno. La colocación
-	// de una pieza no implica necesariamente que se trata de un movimiento
-	// (esto está pensado así para un eventual uso de colocar piezas por
-	// primera vez en el tablero).
-	private boolean colocarPieza(Pieza pieza, char letra, int numero) {
-		
-		boolean retorno;
-		if(consultarPieza(letra, numero) == null) {
-			_casillas[transformarCoordenadas(letra, numero)] = pieza;
-			retorno = true;
-		} else retorno = false;
-		
-		return retorno;
-
-	}
 	
 	// Condiciones previas: la letra y número deben ser valores válidos
 	// para el tablero de ajedrez (i.e. A-H y 1-8).
@@ -509,13 +515,5 @@ class Tablero {
 	}
 
 	// Devuelve el estado del juego que conoce este tablero.
-	private EnumEstadoDeJuego consultarEstadoDelJuego() { return _juego.getEstadoDeJuego(); }
-	
-	// Funcionamiento: quita todas las piezas del tablero.
-	private void quitarPiezas() {
-		for(char letra = 'A'; letra <= 'H'; letra++)
-			for(int numero = 1; numero <= 8; numero++)
-				quitarPiezaPorPosicion(letra, numero);
-	}
-	
+	private EnumEstadoDeJuego consultarEstadoDelJuego() { return _juego.getEstadoDeJuego(); }	
 }

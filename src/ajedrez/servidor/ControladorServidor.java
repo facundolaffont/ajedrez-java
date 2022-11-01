@@ -1,8 +1,13 @@
 package ajedrez.servidor;
 
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import ajedrez.compartido.EnumEstadoDeJuego;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.ArrayList;
 import ajedrez.compartido.IControladorServidor;
+import ajedrez.compartido.IObservador;
+import ajedrez.compartido.Terminador;
 
 class ControladorServidor implements IControladorServidor {
 
@@ -10,7 +15,7 @@ class ControladorServidor implements IControladorServidor {
 
     public ControladorServidor() {
         _juego = new Juego();
-        _cantJugadoresRegistrados = 0;
+        _observadores = new ArrayList<IObservador>();
     }
 
     /**
@@ -20,9 +25,7 @@ class ControladorServidor implements IControladorServidor {
      * @return 0 - La conexión está en buen estado.
      */
     @Override
-    public int verificarConexion() throws RemoteException {
-        return 0;
-    }
+    public int verificarConexion() throws RemoteException { return 0; }
 
     /**
      * @return
@@ -32,13 +35,13 @@ class ControladorServidor implements IControladorServidor {
      */
     @Override
     public int registrarJugador(String nombre, String socket) throws RemoteException {
-        if (_juego.getEstadoDeJuego() != EnumEstadoDeJuego.SIN_PARTIDA)
-            return -1;
-
         int codigoError = _juego.registrarJugador(nombre, socket);
+        switch(codigoError) {
+            case -1: return -2;
+            case -2: return -1;
+        }
 
-        if (codigoError == -1) return -2;
-        else return 0;
+        return 0;
     }
 
     /**
@@ -51,16 +54,39 @@ class ControladorServidor implements IControladorServidor {
      * @return
      *    0 - Observador registrado;
      *    -1 - Sala llena;
-     *    -2 - El socket ya existe.
+     *    -2 - El socket ya existe;
+     *    -3 - Formato de socket no válido;
+     *    -4 - Puerto de socket inválido.
      */
     @Override
     public int registrarObservador(String socket) throws RemoteException {
-        if (_juego.salaLlena()) return -1;
+        // Validaciones de formato.
+        if(!_formatoDeSocketValido(socket)) return -3;
+        if(!_puertoDeSocketValido(socket)) return -4;
 
-        if(_juego.registrarSocket(socket) == -1) return -2;
+        // Intenta registrar el socket.
+        int codigoError = _juego.registrarSocket(socket);
+        switch(codigoError) {
+            case -1: return -2;
+            case -2: return -1;
+        }
 
-        System.out.println("Cliente conectado en socket " + socket + ".");
-        return 0;
+        // Se registra el observador.
+        try {
+            Registry registroRMI = LocateRegistry.getRegistry(_obtenerIPdeSocket(socket), _obtenerPuertoDeSocket(socket));
+            IObservador observador;
+            observador = (IObservador) registroRMI.lookup("ControladorCliente");
+
+            _observadores.add(observador);
+            System.out.println("Cliente conectado en socket " + socket + ".");
+            return 0;
+        } catch (NotBoundException e) {
+            Terminador.getInstance().terminarPorExcepcion(e, e.getMessage());
+            return -255;
+        } catch (Exception e) {
+            Terminador.getInstance().terminarPorExcepcion(e, e.getMessage());
+            return -255;
+        }
     }
 
     /**
@@ -71,18 +97,14 @@ class ControladorServidor implements IControladorServidor {
      */
     @Override
 	public int iniciarPartida() {
-        if (_cantJugadoresRegistrados < 2) return -1;
-
-        if (
-            _juego.getEstadoDeJuego() != EnumEstadoDeJuego.SIN_PARTIDA
-            &&
-            _juego.getEstadoDeJuego() != EnumEstadoDeJuego.SIN_ESTADO
-        ) return -2;
-
         int codigoError = _juego.iniciarPartida();
         switch(codigoError) {
-            //..
+            case -1: return -1;
+            case -2: return -2;
         }
+
+        // Partida inicializada.
+        //_notificarObservadores( QUÉ ENVÍO );
 
         return 0;
     }
@@ -91,5 +113,39 @@ class ControladorServidor implements IControladorServidor {
     /* Miembros privados. */
 
     private Juego _juego;
-    private byte _cantJugadoresRegistrados;
+    private ArrayList<IObservador> _observadores;
+
+    private boolean _formatoDeSocketValido(String socket) {
+        return true;
+    }
+
+    private boolean _puertoDeSocketValido(String socket) {
+        return true;
+    }
+
+    private String _obtenerIPdeSocket(String socket) {
+        return null;
+    }
+    
+    private int _obtenerPuertoDeSocket(String socket) {
+        return 0;
+    }
+
+    private void _notificarObservadores(Object mensaje) {
+        for (IObservador observador : _observadores) {
+            try { observador.actualizar(mensaje); }
+            catch (RemoteException e) {
+                Terminador
+                    .getInstance()
+                    .terminarPorExcepcion(e, e.getMessage()
+                );
+            }
+            catch (Exception e) {
+                Terminador
+                    .getInstance()
+                    .terminarPorExcepcion(e, e.getMessage()
+                );
+            }
+        }
+    }
 }

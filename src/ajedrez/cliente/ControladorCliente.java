@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import ajedrez.cliente.vista.IVista;
 import ajedrez.cliente.vista.VistaConsola;
 import ajedrez.compartido.IControladorServidor;
+import ajedrez.compartido.IObservador;
 
 class ControladorCliente implements IObservador, IControladorCliente {
 
