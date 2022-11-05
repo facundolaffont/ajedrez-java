@@ -29,21 +29,20 @@ class ControladorCliente implements IObservador, IControladorCliente {
      *     -3 - No se pudo enviar el mensaje al servidor.
      */
     public <T extends IControladorServidor> int conectarseAServidor
-        (
-            T controladorServidorStub, String socketObservador
-        ) {
-            _iControladorServidor = controladorServidorStub;
-            try {
-                int codigoError = _iControladorServidor.registrarObservador(socketObservador);
+        ( T controladorServidorStub, String socketObservador )
+    {
+        _iControladorServidor = (IControladorServidor) controladorServidorStub;
+        try {
+            int codigoError = _iControladorServidor.registrarObservador(socketObservador);
 
-                switch(codigoError) {
-                    case -1: return -1;
-                    case -2: return -2;
-                }
-
-                return 0;
+            switch(codigoError) {
+                case -1: return -1;
+                case -2: return -2;
             }
-            catch (RemoteException e) { return -3; }
+
+            return 0;
+        }
+        catch (RemoteException e) { return -3; }
     }
 
     /**
