@@ -62,6 +62,7 @@ class ServidorAjedrez {
 		// Crea el controlador del servidor y guarda su stub en el registro RMI.
 		try {
 			_setControladorServidor(new ControladorServidor());
+			System.setProperty("java.rmi.server.hostname","127.0.0.1");
             _setControladorServidorStub(
 				(IControladorServidor)
                 UnicastRemoteObject.exportObject(

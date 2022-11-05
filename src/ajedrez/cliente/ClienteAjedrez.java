@@ -48,6 +48,7 @@ class ClienteAjedrez implements IClienteAjedrez {
 		// Verifica que no esté actualmente conectado a un servidor.
 		if(_ipServidorRemoto != null) return -3;
 
+		/*
 		try {
 			// Se crea el objeto remoto local que servirá para que el servidor remoto pueda
 			// notificar sobre los cambios en el modelo a este host, que tendrá el rol de
@@ -64,9 +65,11 @@ class ClienteAjedrez implements IClienteAjedrez {
 				.getInstance()
 				.terminarPorExcepcion(e, e.getMessage());
 		}
+		*/
 
         try {
 			// Se obtiene el stub del controlador remoto.
+			System.setProperty("java.rmi.server.hostname","127.0.0.1");
             Registry registroRMI = LocateRegistry.getRegistry(ipServidorRemoto, puertoServidorRemoto);
             IControladorServidor _controladorServidorStub = (IControladorServidor) registroRMI.lookup("ControladorServidor");
 
